@@ -12,9 +12,9 @@ function System.SavePlayer(xPlayer, cb)
         json.encode(xPlayer.properties),
         xPlayer.identifier
     }
-  
+
     MySQL.prepare(
-        'UPDATE `users` SET `group` = ?, `position` = ?, `accounts` = ?, `banking` = ?, `job` = ?, `jobGrade` = ?, `inventory` = ?, `loadout` = ?, `vehicles` = ?, `properties` = ? WHERE `id` = ?',
+        'UPDATE users SET `group` = ?, `position` = ?, `accounts` = ?, `banking` = ?, `job` = ?, `job_grade` = ?, `inventory` = ?, `loadout` = ?, `vehicles` = ?, `properties` = ? WHERE `id` = ?',
         parameters,
         function(affectedRows)
             if affectedRows == 1 then
@@ -31,10 +31,10 @@ function System.SavePlayers(cb)
     if not next(xPlayers) then
         return
     end
-    
+
     local startTime <const> = os.time()
     local parameters = {}
-  
+
     for _, xPlayer in pairs(System.Players) do
         parameters[#parameters + 1] = {
             xPlayer.group,
@@ -50,15 +50,15 @@ function System.SavePlayers(cb)
             xPlayer.identifier
         }
     end
-  
+
     MySQL.prepare(
-        'UPDATE `users` SET `group` = ?, `position` = ?, `accounts` = ?, `banking` = ?, `job` = ?, `jobGrade` = ?, `inventory` = ?, `loadout` = ?, `vehicles` = ?, `properties` = ? WHERE `id` = ?',
-        parameters, 
+        'UPDATE `users` SET `group` = ?, `position` = ?, `accounts` = ?, `banking` = ?, `job` = ?, `job_grade` = ?, `inventory` = ?, `loadout` = ?, `vehicles` = ?, `properties` = ? WHERE `id` = ?',
+        parameters,
         function(results)
             if not results then
                 return
             end
-            
+
             print(('[^2INFO^7] Saved ^5%s^7 %s over ^5%s^7 ms'):format(#parameters, #parameters > 1 and 'players' or 'player', System.Math.Round((os.time() - startTime) / 1000000, 2)))
         end
     )
@@ -85,15 +85,15 @@ function System.IsPlayerAdmin(playerId)
     if (IsPlayerAceAllowed(playerId, 'command') or GetConvar('sv_lan', '') == 'true') and true or false then
         return true
     end
-  
+
     local xPlayer = System.Players[playerId]
-  
+
     if xPlayer then
         if xPlayer.group == 'Admin' then
             return true
         end
     end
-  
+
     return false
 end
 
@@ -134,10 +134,10 @@ function System.GetVehiclePropertiesNet(vehicle)
 
     -- local hasCustomXenonColor, customXenonColorR, customXenonColorG, customXenonColorB = GetVehicleXenonLightsCustomColor(vehicle)
     local customXenonColor = nil
-    if hasCustomXenonColor then 
+    if hasCustomXenonColor then
         customXenonColor = {customXenonColorR, customXenonColorG, customXenonColorB}
     end
-    
+
     local hasCustomSecondaryColor = GetIsVehicleSecondaryColourCustom(vehicle)
     local customSecondaryColor = nil
     if hasCustomSecondaryColor then
@@ -199,7 +199,7 @@ function System.GetVehiclePropertiesNet(vehicle)
 
         pearlescentColor = pearlescentColor,
         wheelColor = wheelColor,
-        
+
         dashboardColor = dashboardColor,
         interiorColor = interiorColor,
 

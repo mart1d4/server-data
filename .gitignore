@@ -1,3 +1,4 @@
-**/\[stream\]/\[vehicles\]
-**/node_modules/
+cache/
+.replxx_history
 server.cfg
+resources/\[stream\]/vehicles

@@ -12,7 +12,7 @@ end)
 local function StartDBSync()
     CreateThread(function()
         while true do
-            Wait(10 * 60 * 1000)
+            Wait(5 * 60 * 1000)
             System.SavePlayers()
         end
     end)
@@ -61,7 +61,7 @@ MySQL.ready(function()
     System.DatabaseConnected = true
 
     local items = MySQL.query.await('SELECT * FROM items')
-    for k, item in ipairs(items) do
+    for _, item in ipairs(items) do
         System.Items[item.name] = {
             name = item.name,
             weight = item.weight,
@@ -70,7 +70,7 @@ MySQL.ready(function()
             canRemove = item.canRemove
         }
     end
-  
+
     local jobGrades = MySQL.query.await('SELECT * FROM job_grades')
     for _, grade in ipairs(jobGrades) do
         if not System.Jobs[grade.job_name] then
@@ -96,7 +96,7 @@ MySQL.ready(function()
             }
         end
     end
-    
+
     -- If no jobs in database
     if not jobGrades then
         System.Jobs['Unemployed'] = {

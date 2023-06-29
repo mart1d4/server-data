@@ -2658,3 +2658,42 @@
 {"level":"info","message":"Executed query (SELECT id FROM npwd_marketplace_listings WHERE identifier = ? [\"055adbd7aa571afd0e0c087294faa36ecfe2d6ac\"]) in 3.8397ms'","module":"DBInterface","timestamp":"2023-06-27T22:32:16.435Z"}
 {"level":"info","message":"Executed query (DELETE FROM npwd_marketplace_listings WHERE identifier = ? AND reported = 0 [\"055adbd7aa571afd0e0c087294faa36ecfe2d6ac\"]) in 1.583ms'","module":"DBInterface","timestamp":"2023-06-27T22:32:16.437Z"}
 {"level":"info","message":"Unloaded NPWD Player, source: (1)","module":"player","timestamp":"2023-06-27T22:32:16.437Z"}
+{"level":"debug","message":"Boot service started","module":"boot","timestamp":"2023-06-29T10:39:03.110Z"}
+{"level":"debug","message":"Marketplace service started","module":"marketplace","timestamp":"2023-06-29T10:39:03.115Z"}
+{"level":"debug","message":"Player Service started","module":"player","timestamp":"2023-06-29T10:39:03.115Z"}
+{"level":"debug","message":"Call service started","module":"calls","timestamp":"2023-06-29T10:39:03.116Z"}
+{"level":"debug","message":"Messages service started","module":"messages","timestamp":"2023-06-29T10:39:03.117Z"}
+{"level":"debug","message":"Notes service started","module":"notes","timestamp":"2023-06-29T10:39:03.117Z"}
+{"level":"debug","message":"Contacts service started","module":"contact","timestamp":"2023-06-29T10:39:03.117Z"}
+{"level":"debug","message":"Photo service started","module":"photo","timestamp":"2023-06-29T10:39:03.127Z"}
+{"level":"debug","message":"Twitter service started","module":"twitter","timestamp":"2023-06-29T10:39:03.128Z"}
+{"level":"debug","message":"Match service started","module":"match","timestamp":"2023-06-29T10:39:03.128Z"}
+{"level":"debug","message":"Beginning database schema validation","module":"boot","timestamp":"2023-06-29T10:39:31.690Z"}
+{"level":"info","message":"Successfully started","timestamp":"2023-06-29T10:39:31.697Z"}
+{"level":"error","message":"Error executing (SHOW TABLES WHERE `Tables_in_west_coast_dreamin`LIKE ? [\"users\"]) with error message Access denied for user 'root'@'localhost' (using password: YES)","module":"DBInterface","timestamp":"2023-06-29T10:39:32.707Z"}
+{"level":"debug","message":"Boot service started","module":"boot","timestamp":"2023-06-29T11:59:15.526Z"}
+{"level":"debug","message":"Marketplace service started","module":"marketplace","timestamp":"2023-06-29T11:59:15.532Z"}
+{"level":"debug","message":"Player Service started","module":"player","timestamp":"2023-06-29T11:59:15.532Z"}
+{"level":"debug","message":"Call service started","module":"calls","timestamp":"2023-06-29T11:59:15.533Z"}
+{"level":"debug","message":"Messages service started","module":"messages","timestamp":"2023-06-29T11:59:15.533Z"}
+{"level":"debug","message":"Notes service started","module":"notes","timestamp":"2023-06-29T11:59:15.533Z"}
+{"level":"debug","message":"Contacts service started","module":"contact","timestamp":"2023-06-29T11:59:15.534Z"}
+{"level":"debug","message":"Photo service started","module":"photo","timestamp":"2023-06-29T11:59:15.545Z"}
+{"level":"debug","message":"Twitter service started","module":"twitter","timestamp":"2023-06-29T11:59:15.545Z"}
+{"level":"debug","message":"Match service started","module":"match","timestamp":"2023-06-29T11:59:15.545Z"}
+{"level":"debug","message":"Beginning database schema validation","module":"boot","timestamp":"2023-06-29T11:59:16.408Z"}
+{"level":"info","message":"Successfully started","timestamp":"2023-06-29T11:59:16.415Z"}
+{"level":"error","message":"Error executing (SHOW TABLES WHERE `Tables_in_west_coast_dreamin`LIKE ? [\"users\"]) with error message Access denied for user 'root'@'localhost' (using password: YES)","module":"DBInterface","timestamp":"2023-06-29T11:59:16.842Z"}
+{"level":"debug","message":"Boot service started","module":"boot","timestamp":"2023-06-29T12:37:30.044Z"}
+{"level":"debug","message":"Marketplace service started","module":"marketplace","timestamp":"2023-06-29T12:37:30.049Z"}
+{"level":"debug","message":"Player Service started","module":"player","timestamp":"2023-06-29T12:37:30.049Z"}
+{"level":"debug","message":"Call service started","module":"calls","timestamp":"2023-06-29T12:37:30.051Z"}
+{"level":"debug","message":"Messages service started","module":"messages","timestamp":"2023-06-29T12:37:30.051Z"}
+{"level":"debug","message":"Notes service started","module":"notes","timestamp":"2023-06-29T12:37:30.051Z"}
+{"level":"debug","message":"Contacts service started","module":"contact","timestamp":"2023-06-29T12:37:30.051Z"}
+{"level":"debug","message":"Photo service started","module":"photo","timestamp":"2023-06-29T12:37:30.062Z"}
+{"level":"debug","message":"Twitter service started","module":"twitter","timestamp":"2023-06-29T12:37:30.063Z"}
+{"level":"debug","message":"Match service started","module":"match","timestamp":"2023-06-29T12:37:30.063Z"}
+{"level":"debug","message":"Beginning database schema validation","module":"boot","timestamp":"2023-06-29T12:37:38.822Z"}
+{"level":"info","message":"Successfully started","timestamp":"2023-06-29T12:37:38.829Z"}
+{"level":"error","message":"Error executing (SHOW TABLES WHERE `Tables_in_west_coast_dreamin`LIKE ? [\"users\"]) with error message Access denied for user 'root'@'localhost' (using password: YES)","module":"DBInterface","timestamp":"2023-06-29T12:37:39.235Z"}
