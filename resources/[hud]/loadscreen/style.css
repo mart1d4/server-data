@@ -1,0 +1,129 @@
+@font-face {
+    font-family: 'GG Sans';
+    src: url('GGSans400.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'GG Sans';
+    src: url('GGSans800.woff2') format('woff2');
+    font-weight: 800;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Ginto Nord';
+    src: url('GintoNord.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+body {
+    position: relative;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+
+    margin: 0;
+    padding: 0;
+
+    background-image: url(loadscreen.svg);
+    background-size: 90% 90%;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-color: hsl(220, 9%, 7%);
+}
+
+.title {
+    position: absolute;
+    top: 50px;
+    left: 50px;
+    color: hsl(0, 0%, 100%);
+}
+
+h1 {
+    font-family: 'Ginto Nord', 'Noto Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 56px;
+    font-weight: 800;
+    line-height: 95%;
+    text-transform: uppercase;
+    text-rendering: geometricPrecision;
+    user-select: none;
+    margin: 0 0 24px 0;
+}
+
+h2 {
+    font-family: 'GG Sans', 'Noto Sans', sans-serif;
+    font-size: 48px;
+    line-height: 120%;
+    font-weight: 800;
+    user-select: none;
+    margin: 0;
+}
+
+.barContainer {
+    position: absolute;
+    left: 50px;
+    right: 50px;
+    bottom: 50px;
+    color: hsl(0, 0%, 100%);
+}
+
+.intel {
+    display: flex;
+    align-items: flex-end;
+}
+
+.intel > h3 {
+    font-family: 'GG Sans', 'Noto Sans', sans-serif;
+    font-size: 24px;
+    line-height: 1.75;
+    font-weight: 400;
+    user-select: none;
+    margin: 0 0 0 24px;
+}
+
+.barContainer > p {
+    font-family: 'GG Sans', 'Noto Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.625;
+    font-weight: 400;
+    user-select: none;
+    margin: 24px 0 0 0;
+}
+
+.barContainer > p > code {
+    background-color: hsla(0, 0%, 100%, 0.15);
+    padding: 2px 4px;
+    border-radius: 3px;
+    box-sizing: border-box;
+    margin-left: 4px;
+}
+
+.loadbar {
+    width: 100%;
+    height: 20px;
+    background-color: hsl(0, 0%, 100%, 0.25);
+    border-radius: 3px;
+
+    margin: 5px 0;
+    overflow: hidden;
+    position: relative;
+}
+
+.loadbar > div {
+    width: 10%;
+    height: 14px;
+    background-color: hsl(0, 0%, 100%, 0.8);
+    border-radius: 3px;
+    margin: 3px;
+    box-sizing: border-box;
+
+    position: absolute;
+    left: 10%;
+}
