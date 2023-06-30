@@ -2697,3 +2697,296 @@
 {"level":"debug","message":"Beginning database schema validation","module":"boot","timestamp":"2023-06-29T12:37:38.822Z"}
 {"level":"info","message":"Successfully started","timestamp":"2023-06-29T12:37:38.829Z"}
 {"level":"error","message":"Error executing (SHOW TABLES WHERE `Tables_in_west_coast_dreamin`LIKE ? [\"users\"]) with error message Access denied for user 'root'@'localhost' (using password: YES)","module":"DBInterface","timestamp":"2023-06-29T12:37:39.235Z"}
+{"level":"debug","message":"Boot service started","module":"boot","timestamp":"2023-06-30T00:28:16.005Z"}
+{"level":"debug","message":"Marketplace service started","module":"marketplace","timestamp":"2023-06-30T00:28:16.011Z"}
+{"level":"debug","message":"Player Service started","module":"player","timestamp":"2023-06-30T00:28:16.011Z"}
+{"level":"debug","message":"Call service started","module":"calls","timestamp":"2023-06-30T00:28:16.012Z"}
+{"level":"debug","message":"Messages service started","module":"messages","timestamp":"2023-06-30T00:28:16.012Z"}
+{"level":"debug","message":"Notes service started","module":"notes","timestamp":"2023-06-30T00:28:16.013Z"}
+{"level":"debug","message":"Contacts service started","module":"contact","timestamp":"2023-06-30T00:28:16.013Z"}
+{"level":"debug","message":"Photo service started","module":"photo","timestamp":"2023-06-30T00:28:16.029Z"}
+{"level":"debug","message":"Twitter service started","module":"twitter","timestamp":"2023-06-30T00:28:16.029Z"}
+{"level":"debug","message":"Match service started","module":"match","timestamp":"2023-06-30T00:28:16.029Z"}
+{"level":"debug","message":"Beginning database schema validation","module":"boot","timestamp":"2023-06-30T00:28:24.029Z"}
+{"level":"info","message":"Successfully started","timestamp":"2023-06-30T00:28:24.037Z"}
+{"level":"error","message":"Error executing (SHOW TABLES WHERE `Tables_in_west_coast_dreamin`LIKE ? [\"users\"]) with error message Access denied for user 'root'@'localhost' (using password: YES)","module":"DBInterface","timestamp":"2023-06-30T00:28:24.499Z"}
+{"level":"debug","message":"Boot service started","module":"boot","timestamp":"2023-06-30T01:23:55.284Z"}
+{"level":"debug","message":"Marketplace service started","module":"marketplace","timestamp":"2023-06-30T01:23:55.289Z"}
+{"level":"debug","message":"Player Service started","module":"player","timestamp":"2023-06-30T01:23:55.289Z"}
+{"level":"debug","message":"Call service started","module":"calls","timestamp":"2023-06-30T01:23:55.290Z"}
+{"level":"debug","message":"Messages service started","module":"messages","timestamp":"2023-06-30T01:23:55.291Z"}
+{"level":"debug","message":"Notes service started","module":"notes","timestamp":"2023-06-30T01:23:55.291Z"}
+{"level":"debug","message":"Contacts service started","module":"contact","timestamp":"2023-06-30T01:23:55.291Z"}
+{"level":"debug","message":"Photo service started","module":"photo","timestamp":"2023-06-30T01:23:55.302Z"}
+{"level":"debug","message":"Twitter service started","module":"twitter","timestamp":"2023-06-30T01:23:55.302Z"}
+{"level":"debug","message":"Match service started","module":"match","timestamp":"2023-06-30T01:23:55.302Z"}
+{"level":"debug","message":"Beginning database schema validation","module":"boot","timestamp":"2023-06-30T01:24:05.891Z"}
+{"level":"info","message":"Successfully started","timestamp":"2023-06-30T01:24:05.898Z"}
+{"level":"error","message":"Error executing (SHOW TABLES WHERE `Tables_in_west_coast_dreamin`LIKE ? [\"users\"]) with error message Unknown database 'west_coast_dreamin'","module":"DBInterface","timestamp":"2023-06-30T01:24:06.836Z"}
+{"level":"debug","message":"Boot service started","module":"boot","timestamp":"2023-06-30T01:27:33.580Z"}
+{"level":"debug","message":"Marketplace service started","module":"marketplace","timestamp":"2023-06-30T01:27:33.585Z"}
+{"level":"debug","message":"Player Service started","module":"player","timestamp":"2023-06-30T01:27:33.585Z"}
+{"level":"debug","message":"Call service started","module":"calls","timestamp":"2023-06-30T01:27:33.587Z"}
+{"level":"debug","message":"Messages service started","module":"messages","timestamp":"2023-06-30T01:27:33.587Z"}
+{"level":"debug","message":"Notes service started","module":"notes","timestamp":"2023-06-30T01:27:33.587Z"}
+{"level":"debug","message":"Contacts service started","module":"contact","timestamp":"2023-06-30T01:27:33.587Z"}
+{"level":"debug","message":"Photo service started","module":"photo","timestamp":"2023-06-30T01:27:33.598Z"}
+{"level":"debug","message":"Twitter service started","module":"twitter","timestamp":"2023-06-30T01:27:33.598Z"}
+{"level":"debug","message":"Match service started","module":"match","timestamp":"2023-06-30T01:27:33.598Z"}
+{"level":"debug","message":"Beginning database schema validation","module":"boot","timestamp":"2023-06-30T01:27:35.142Z"}
+{"level":"info","message":"Successfully started","timestamp":"2023-06-30T01:27:35.149Z"}
+{"level":"info","message":"Executed query (SHOW TABLES WHERE `Tables_in_west_coast_dreamin`LIKE ? [\"users\"]) in 419.1542ms'","module":"DBInterface","timestamp":"2023-06-30T01:27:35.562Z"}
+{"level":"info","message":"Executed query (SHOW COLUMNS IN users []) in 12.5169ms'","module":"DBInterface","timestamp":"2023-06-30T01:27:35.575Z"}
+{"level":"debug","message":"Database schema successfully validated","module":"boot","timestamp":"2023-06-30T01:27:35.575Z"}
+{"level":"info","message":"Started loading for mart1d4 (1)","module":"player","timestamp":"2023-06-30T01:29:18.350Z"}
+{"level":"info","message":"Executed query (SELECT phone_number FROM users WHERE id = ? LIMIT 1 [\"055adbd7aa571afd0e0c087294faa36ecfe2d6ac\"]) in 2.4556ms'","module":"DBInterface","timestamp":"2023-06-30T01:29:18.352Z"}
+{"level":"debug","message":"Find user for number generation data >","module":"player","timestamp":"2023-06-30T01:29:18.353Z"}
+{"level":"debug","message":[],"module":"player","timestamp":"2023-06-30T01:29:18.353Z"}
+{"level":"debug","message":"Phone number was returned as null, generating new number","module":"player","timestamp":"2023-06-30T01:29:18.353Z"}
+{"level":"info","message":"Executed query (SELECT EXISTS(SELECT * FROM users WHERE phone_number = ?) [\"786-228-7188\"]) in 1.2846ms'","module":"DBInterface","timestamp":"2023-06-30T01:29:18.355Z"}
+{"level":"debug","message":"Phone number generated > 786-228-7188","module":"player","timestamp":"2023-06-30T01:29:18.355Z"}
+{"level":"info","message":"Executed query (UPDATE users SET phone_number = ? WHERE id = ? [\"786-228-7188\",\"055adbd7aa571afd0e0c087294faa36ecfe2d6ac\"]) in 1.2988ms'","module":"DBInterface","timestamp":"2023-06-30T01:29:18.356Z"}
+{"level":"error","message":"Failed to store phone number in database","module":"player","timestamp":"2023-06-30T01:29:18.356Z"}
+{"level":"error","message":"UPDATE users SET phone_number = 786-228-7188 WHERE id = 055adbd7aa571afd0e0c087294faa36ecfe2d6ac","module":"player","timestamp":"2023-06-30T01:29:18.357Z"}
+{"level":"info","message":"NPWD Player Loaded!","module":"player","timestamp":"2023-06-30T01:29:18.357Z"}
+{"level":"debug","message":{"_identifier":"055adbd7aa571afd0e0c087294faa36ecfe2d6ac","_phoneNumber":"786-228-7188","source":1,"username":"mart1d4"},"module":"player","timestamp":"2023-06-30T01:29:18.357Z"}
+{"level":"silly","message":"netPromise > npwd:fetchTweets > RequestObj","module":"events","timestamp":"2023-06-30T01:29:36.526Z"}
+{"level":"silly","message":{"data":{"pageId":0},"source":1},"module":"events","timestamp":"2023-06-30T01:29:36.526Z"}
+{"level":"error","message":"Error executing (\n        SELECT *\n        FROM npwd_twitter_profiles\n        WHERE identifier = ?\n        LIMIT 1\n\t\t [\"055adbd7aa571afd0e0c087294faa36ecfe2d6ac\"]) with error message Table 'west_coast_dreamin.npwd_twitter_profiles' doesn't exist","module":"DBInterface","timestamp":"2023-06-30T01:29:36.537Z"}
+{"level":"error","message":"Fetching tweets failed, (intermediate value) is not iterable","module":"twitter","source":1,"timestamp":"2023-06-30T01:29:36.538Z"}
+{"level":"silly","message":"Response Promise Event npwd:fetchTweets:6a466810-4e02-4f1b-a98f-4cade86cd3e7 (12.9259ms), Data >>","module":"events","timestamp":"2023-06-30T01:29:36.539Z"}
+{"level":"silly","message":{"errorMsg":"(intermediate value) is not iterable","status":"error"},"module":"events","timestamp":"2023-06-30T01:29:36.539Z"}
+{"level":"silly","message":"netPromise > npwd:getOrCreateTwitterProfile > RequestObj","module":"events","timestamp":"2023-06-30T01:29:36.630Z"}
+{"level":"silly","message":{"data":null,"source":1},"module":"events","timestamp":"2023-06-30T01:29:36.630Z"}
+{"level":"silly","message":"netPromise > phone:getMyProfile > RequestObj","module":"events","timestamp":"2023-06-30T01:29:36.630Z"}
+{"level":"silly","message":{"data":null,"source":1},"module":"events","timestamp":"2023-06-30T01:29:36.631Z"}
+{"level":"silly","message":"netPromise > npwd:fetchMessageGroups > RequestObj","module":"events","timestamp":"2023-06-30T01:29:36.631Z"}
+{"level":"silly","message":{"data":null,"source":1},"module":"events","timestamp":"2023-06-30T01:29:36.631Z"}
+{"level":"silly","message":"netPromise > npwd-contact-getAll > RequestObj","module":"events","timestamp":"2023-06-30T01:29:36.633Z"}
+{"level":"silly","message":{"data":null,"source":1},"module":"events","timestamp":"2023-06-30T01:29:36.633Z"}
+{"level":"error","message":"Error executing (\n        SELECT *\n        FROM npwd_twitter_profiles\n        WHERE identifier = ?\n        LIMIT 1\n\t\t [\"055adbd7aa571afd0e0c087294faa36ecfe2d6ac\"]) with error message Table 'west_coast_dreamin.npwd_twitter_profiles' doesn't exist","module":"DBInterface","timestamp":"2023-06-30T01:29:36.637Z"}
+{"level":"silly","message":"Response Promise Event npwd:getOrCreateTwitterProfile:011bf69a-899d-4642-832b-45a504f55597 (7.8268ms), Data >>","module":"events","timestamp":"2023-06-30T01:29:36.638Z"}
+{"level":"silly","message":{"errorMsg":"(intermediate value) is not iterable","status":"error"},"module":"events","timestamp":"2023-06-30T01:29:36.638Z"}
+{"level":"error","message":"Failed to get or create profile, (intermediate value) is not iterable","module":"twitter","source":1,"timestamp":"2023-06-30T01:29:36.638Z"}
+{"level":"error","message":"Error executing (\n        SELECT *,\n               UNIX_TIMESTAMP(updatedAt) AS lastActive\n        FROM npwd_match_profiles\n        WHERE identifier = ?\n        LIMIT 1\n\t\t [\"055adbd7aa571afd0e0c087294faa36ecfe2d6ac\"]) with error message Table 'west_coast_dreamin.npwd_match_profiles' doesn't exist","module":"DBInterface","timestamp":"2023-06-30T01:29:36.641Z"}
+{"level":"error","message":"Failed to get player profile, (intermediate value) is not iterable","module":"match","timestamp":"2023-06-30T01:29:36.642Z"}
+{"level":"error","message":"Error executing (SELECT npwd_messages_conversations.id,\n                          npwd_messages_conversations.conversation_list         as conversationList,\n                          npwd_messages_participants.unread_count               as unreadCount,\n                          npwd_messages_conversations.is_group_chat             as isGroupChat,\n                          npwd_messages_conversations.label,\n                          UNIX_TIMESTAMP(npwd_messages_conversations.updatedAt) as updatedAt,\n                          npwd_messages_participants.participant\n                   FROM npwd_messages_conversations\n                            INNER JOIN npwd_messages_participants\n                                       on npwd_messages_conversations.id = npwd_messages_participants.conversation_id\n                   WHERE npwd_messages_participants.participant = ? [\"786-228-7188\"]) with error message Table 'west_coast_dreamin.npwd_messages_conversations' doesn't exist","module":"DBInterface","timestamp":"2023-06-30T01:29:36.643Z"}
+{"level":"error","message":"Error executing (SELECT * FROM npwd_phone_contacts WHERE identifier = ? ORDER BY display ASC [\"055adbd7aa571afd0e0c087294faa36ecfe2d6ac\"]) with error message Table 'west_coast_dreamin.npwd_phone_contacts' doesn't exist","module":"DBInterface","timestamp":"2023-06-30T01:29:36.643Z"}
+{"level":"silly","message":"Response Promise Event phone:getMyProfile:dc34f644-bcd1-43e7-b05e-6021ecf7e177 (11.7026ms), Data >>","module":"events","timestamp":"2023-06-30T01:29:36.642Z"}
+{"level":"silly","message":{"status":"ok"},"module":"events","timestamp":"2023-06-30T01:29:36.642Z"}
+{"level":"silly","message":"Response Promise Event npwd:fetchMessageGroups:2df5c7b8-d249-4053-b0cf-8db3713d7cd7 (11.7186ms), Data >>","module":"events","timestamp":"2023-06-30T01:29:36.643Z"}
+{"level":"silly","message":{"errorMsg":"(intermediate value) is not iterable","status":"error"},"module":"events","timestamp":"2023-06-30T01:29:36.643Z"}
+{"level":"silly","message":"Response Promise Event npwd-contact-getAll:36d1b420-a8d6-429a-9a1b-4b19ecee3855 (10.7462ms), Data >>","module":"events","timestamp":"2023-06-30T01:29:36.644Z"}
+{"level":"silly","message":{"errorMsg":"GENERIC_DB_ERROR","status":"error"},"module":"events","timestamp":"2023-06-30T01:29:36.644Z"}
+{"level":"error","message":"Error in handleFetchContact (055adbd7aa571afd0e0c087294faa36ecfe2d6ac), (intermediate value) is not iterable","module":"contact","timestamp":"2023-06-30T01:29:36.644Z"}
+{"level":"info","message":"Executed query (SELECT id FROM npwd_marketplace_listings WHERE identifier = ? [\"055adbd7aa571afd0e0c087294faa36ecfe2d6ac\"]) in 6.2081ms'","module":"DBInterface","timestamp":"2023-06-30T01:31:49.326Z"}
+{"level":"info","message":"Executed query (DELETE FROM npwd_marketplace_listings WHERE identifier = ? AND reported = 0 [\"055adbd7aa571afd0e0c087294faa36ecfe2d6ac\"]) in 1.1208ms'","module":"DBInterface","timestamp":"2023-06-30T01:31:49.327Z"}
+{"level":"info","message":"Unloaded NPWD Player, source: (1)","module":"player","timestamp":"2023-06-30T01:31:49.327Z"}
+{"level":"debug","message":"Boot service started","module":"boot","timestamp":"2023-06-30T01:31:57.216Z"}
+{"level":"debug","message":"Marketplace service started","module":"marketplace","timestamp":"2023-06-30T01:31:57.222Z"}
+{"level":"debug","message":"Player Service started","module":"player","timestamp":"2023-06-30T01:31:57.222Z"}
+{"level":"debug","message":"Call service started","module":"calls","timestamp":"2023-06-30T01:31:57.223Z"}
+{"level":"debug","message":"Messages service started","module":"messages","timestamp":"2023-06-30T01:31:57.224Z"}
+{"level":"debug","message":"Notes service started","module":"notes","timestamp":"2023-06-30T01:31:57.224Z"}
+{"level":"debug","message":"Contacts service started","module":"contact","timestamp":"2023-06-30T01:31:57.224Z"}
+{"level":"debug","message":"Photo service started","module":"photo","timestamp":"2023-06-30T01:31:57.239Z"}
+{"level":"debug","message":"Twitter service started","module":"twitter","timestamp":"2023-06-30T01:31:57.240Z"}
+{"level":"debug","message":"Match service started","module":"match","timestamp":"2023-06-30T01:31:57.240Z"}
+{"level":"debug","message":"Beginning database schema validation","module":"boot","timestamp":"2023-06-30T01:31:59.059Z"}
+{"level":"info","message":"Successfully started","timestamp":"2023-06-30T01:31:59.068Z"}
+{"level":"info","message":"Executed query (SHOW TABLES WHERE `Tables_in_west_coast_dreamin`LIKE ? [\"users\"]) in 513.8108ms'","module":"DBInterface","timestamp":"2023-06-30T01:31:59.574Z"}
+{"level":"info","message":"Executed query (SHOW COLUMNS IN users []) in 24.3429ms'","module":"DBInterface","timestamp":"2023-06-30T01:31:59.598Z"}
+{"level":"debug","message":"Database schema successfully validated","module":"boot","timestamp":"2023-06-30T01:31:59.599Z"}
+{"level":"info","message":"Started loading for mart1d4 (1)","module":"player","timestamp":"2023-06-30T01:32:44.046Z"}
+{"level":"info","message":"Executed query (SELECT phone_number FROM users WHERE id = ? LIMIT 1 [\"055adbd7aa571afd0e0c087294faa36ecfe2d6ac\"]) in 4.0083ms'","module":"DBInterface","timestamp":"2023-06-30T01:32:44.050Z"}
+{"level":"debug","message":"Find user for number generation data >","module":"player","timestamp":"2023-06-30T01:32:44.050Z"}
+{"level":"debug","message":[{"phone_number":null}],"module":"player","timestamp":"2023-06-30T01:32:44.050Z"}
+{"level":"debug","message":"Phone number was returned as null, generating new number","module":"player","timestamp":"2023-06-30T01:32:44.050Z"}
+{"level":"info","message":"Executed query (SELECT EXISTS(SELECT * FROM users WHERE phone_number = ?) [\"253-334-6674\"]) in 1.3376ms'","module":"DBInterface","timestamp":"2023-06-30T01:32:44.052Z"}
+{"level":"debug","message":"Phone number generated > 253-334-6674","module":"player","timestamp":"2023-06-30T01:32:44.052Z"}
+{"level":"info","message":"Executed query (UPDATE users SET phone_number = ? WHERE id = ? [\"253-334-6674\",\"055adbd7aa571afd0e0c087294faa36ecfe2d6ac\"]) in 3.5279ms'","module":"DBInterface","timestamp":"2023-06-30T01:32:44.056Z"}
+{"level":"info","message":"NPWD Player Loaded!","module":"player","timestamp":"2023-06-30T01:32:44.056Z"}
+{"level":"debug","message":{"_identifier":"055adbd7aa571afd0e0c087294faa36ecfe2d6ac","_phoneNumber":"253-334-6674","source":1,"username":"mart1d4"},"module":"player","timestamp":"2023-06-30T01:32:44.056Z"}
+{"level":"silly","message":"netPromise > npwd:fetchTweets > RequestObj","module":"events","timestamp":"2023-06-30T01:33:02.275Z"}
+{"level":"silly","message":{"data":{"pageId":0},"source":1},"module":"events","timestamp":"2023-06-30T01:33:02.275Z"}
+{"level":"info","message":"Executed query (\n        SELECT *\n        FROM npwd_twitter_profiles\n        WHERE identifier = ?\n        LIMIT 1\n\t\t [\"055adbd7aa571afd0e0c087294faa36ecfe2d6ac\"]) in 19.6197ms'","module":"DBInterface","timestamp":"2023-06-30T01:33:02.295Z"}
+{"level":"warn","message":"Aborted fetching tweets for user 055adbd7aa571afd0e0c087294faa36ecfe2d6ac because they do not have a profile.","module":"twitter","timestamp":"2023-06-30T01:33:02.296Z"}
+{"level":"silly","message":"Response Promise Event npwd:fetchTweets:fc6eb458-1780-4980-9ab3-dfc0e030ead0 (20.9318ms), Data >>","module":"events","timestamp":"2023-06-30T01:33:02.296Z"}
+{"level":"silly","message":{"data":[],"status":"ok"},"module":"events","timestamp":"2023-06-30T01:33:02.296Z"}
+{"level":"silly","message":"netPromise > npwd:getOrCreateTwitterProfile > RequestObj","module":"events","timestamp":"2023-06-30T01:33:02.376Z"}
+{"level":"silly","message":{"data":null,"source":1},"module":"events","timestamp":"2023-06-30T01:33:02.376Z"}
+{"level":"silly","message":"netPromise > phone:getMyProfile > RequestObj","module":"events","timestamp":"2023-06-30T01:33:02.376Z"}
+{"level":"silly","message":{"data":null,"source":1},"module":"events","timestamp":"2023-06-30T01:33:02.377Z"}
+{"level":"silly","message":"netPromise > npwd:fetchMessageGroups > RequestObj","module":"events","timestamp":"2023-06-30T01:33:02.377Z"}
+{"level":"silly","message":{"data":null,"source":1},"module":"events","timestamp":"2023-06-30T01:33:02.377Z"}
+{"level":"silly","message":"netPromise > npwd-contact-getAll > RequestObj","module":"events","timestamp":"2023-06-30T01:33:02.379Z"}
+{"level":"silly","message":{"data":null,"source":1},"module":"events","timestamp":"2023-06-30T01:33:02.379Z"}
+{"level":"info","message":"Executed query (\n        SELECT *\n        FROM npwd_twitter_profiles\n        WHERE identifier = ?\n        LIMIT 1\n\t\t [\"055adbd7aa571afd0e0c087294faa36ecfe2d6ac\"]) in 6.6049ms'","module":"DBInterface","timestamp":"2023-06-30T01:33:02.383Z"}
+{"level":"info","message":"Creating default Twitter profile 2533346674 for 055adbd7aa571afd0e0c087294faa36ecfe2d6ac","module":"twitter","timestamp":"2023-06-30T01:33:02.383Z"}
+{"level":"info","message":"Executed query (\n        SELECT *,\n               UNIX_TIMESTAMP(updatedAt) AS lastActive\n        FROM npwd_match_profiles\n        WHERE identifier = ?\n        LIMIT 1\n\t\t [\"055adbd7aa571afd0e0c087294faa36ecfe2d6ac\"]) in 10.3344ms'","module":"DBInterface","timestamp":"2023-06-30T01:33:02.387Z"}
+{"level":"info","message":"Creating default match profile 2533346674 for 055adbd7aa571afd0e0c087294faa36ecfe2d6ac","module":"match","timestamp":"2023-06-30T01:33:02.387Z"}
+{"level":"info","message":"Executed query (SELECT npwd_messages_conversations.id,\n                          npwd_messages_conversations.conversation_list         as conversationList,\n                          npwd_messages_participants.unread_count               as unreadCount,\n                          npwd_messages_conversations.is_group_chat             as isGroupChat,\n                          npwd_messages_conversations.label,\n                          UNIX_TIMESTAMP(npwd_messages_conversations.updatedAt) as updatedAt,\n                          npwd_messages_participants.participant\n                   FROM npwd_messages_conversations\n                            INNER JOIN npwd_messages_participants\n                                       on npwd_messages_conversations.id = npwd_messages_participants.conversation_id\n                   WHERE npwd_messages_participants.participant = ? [\"253-334-6674\"]) in 10.612ms'","module":"DBInterface","timestamp":"2023-06-30T01:33:02.388Z"}
+{"level":"info","message":"Executed query (SELECT * FROM npwd_phone_contacts WHERE identifier = ? ORDER BY display ASC [\"055adbd7aa571afd0e0c087294faa36ecfe2d6ac\"]) in 9.7884ms'","module":"DBInterface","timestamp":"2023-06-30T01:33:02.389Z"}
+{"level":"silly","message":"Response Promise Event npwd:fetchMessageGroups:b13d8a32-c750-47df-a238-dfacb0a815be (11.0231ms), Data >>","module":"events","timestamp":"2023-06-30T01:33:02.388Z"}
+{"level":"silly","message":{"data":[],"status":"ok"},"module":"events","timestamp":"2023-06-30T01:33:02.388Z"}
+{"level":"silly","message":"Response Promise Event npwd-contact-getAll:98442df3-5f42-485a-9a0a-9106f0f6d20f (10.1714ms), Data >>","module":"events","timestamp":"2023-06-30T01:33:02.389Z"}
+{"level":"silly","message":{"data":[],"status":"ok"},"module":"events","timestamp":"2023-06-30T01:33:02.389Z"}
+{"level":"info","message":"Executed query (\n        SELECT *\n        FROM npwd_twitter_profiles\n        WHERE identifier = ?\n        LIMIT 1\n\t\t [\"055adbd7aa571afd0e0c087294faa36ecfe2d6ac\"]) in 0.9373ms'","module":"DBInterface","timestamp":"2023-06-30T01:33:02.391Z"}
+{"level":"silly","message":"Response Promise Event npwd:getOrCreateTwitterProfile:585051b0-5fec-4562-b410-dd083cf3547a (15.1503ms), Data >>","module":"events","timestamp":"2023-06-30T01:33:02.391Z"}
+{"level":"silly","message":{"data":{"avatar_url":"https://i.file.glass/QrEvq.png","createdAt":"2023-06-30T01:33:02.000Z","id":1,"identifier":"055adbd7aa571afd0e0c087294faa36ecfe2d6ac","profile_name":"2533346674","updatedAt":"2023-06-30T01:33:02.000Z"},"status":"ok"},"module":"events","timestamp":"2023-06-30T01:33:02.391Z"}
+{"level":"info","message":"Executed query (\n        SELECT *,\n               UNIX_TIMESTAMP(updatedAt) AS lastActive\n        FROM npwd_match_profiles\n        WHERE identifier = ?\n        LIMIT 1\n\t\t [\"055adbd7aa571afd0e0c087294faa36ecfe2d6ac\"]) in 0.7151ms'","module":"DBInterface","timestamp":"2023-06-30T01:33:02.393Z"}
+{"level":"silly","message":"Response Promise Event phone:getMyProfile:42c8dcbd-b944-49a2-b670-b357536803dc (16.722ms), Data >>","module":"events","timestamp":"2023-06-30T01:33:02.393Z"}
+{"level":"silly","message":{"data":{"bio":"","createdAt":"2023-06-30T01:33:02.000Z","id":1,"identifier":"055adbd7aa571afd0e0c087294faa36ecfe2d6ac","image":"https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg","job":"","lastActive":1688088782,"lastActiveFormatted":"Fri, 30 Jun 2023 01:33:02 GMT","location":"","name":"2533346674","tagList":[],"tags":"","updatedAt":"2023-06-30T01:33:02.000Z","viewed":false,"voiceMessage":null},"status":"ok"},"module":"events","timestamp":"2023-06-30T01:33:02.393Z"}
+{"level":"info","message":"Executed query (SELECT id FROM npwd_marketplace_listings WHERE identifier = ? [\"055adbd7aa571afd0e0c087294faa36ecfe2d6ac\"]) in 4.2689ms'","module":"DBInterface","timestamp":"2023-06-30T01:34:36.981Z"}
+{"level":"info","message":"Executed query (DELETE FROM npwd_marketplace_listings WHERE identifier = ? AND reported = 0 [\"055adbd7aa571afd0e0c087294faa36ecfe2d6ac\"]) in 0.7673ms'","module":"DBInterface","timestamp":"2023-06-30T01:34:36.982Z"}
+{"level":"info","message":"Unloaded NPWD Player, source: (1)","module":"player","timestamp":"2023-06-30T01:34:36.982Z"}
+{"level":"debug","message":"Boot service started","module":"boot","timestamp":"2023-06-30T01:34:44.465Z"}
+{"level":"debug","message":"Marketplace service started","module":"marketplace","timestamp":"2023-06-30T01:34:44.471Z"}
+{"level":"debug","message":"Player Service started","module":"player","timestamp":"2023-06-30T01:34:44.471Z"}
+{"level":"debug","message":"Call service started","module":"calls","timestamp":"2023-06-30T01:34:44.473Z"}
+{"level":"debug","message":"Messages service started","module":"messages","timestamp":"2023-06-30T01:34:44.473Z"}
+{"level":"debug","message":"Notes service started","module":"notes","timestamp":"2023-06-30T01:34:44.473Z"}
+{"level":"debug","message":"Contacts service started","module":"contact","timestamp":"2023-06-30T01:34:44.473Z"}
+{"level":"debug","message":"Photo service started","module":"photo","timestamp":"2023-06-30T01:34:44.485Z"}
+{"level":"debug","message":"Twitter service started","module":"twitter","timestamp":"2023-06-30T01:34:44.485Z"}
+{"level":"debug","message":"Match service started","module":"match","timestamp":"2023-06-30T01:34:44.485Z"}
+{"level":"debug","message":"Beginning database schema validation","module":"boot","timestamp":"2023-06-30T01:34:46.422Z"}
+{"level":"info","message":"Successfully started","timestamp":"2023-06-30T01:34:46.429Z"}
+{"level":"info","message":"Executed query (SHOW TABLES WHERE `Tables_in_west_coast_dreamin`LIKE ? [\"users\"]) in 473.9198ms'","module":"DBInterface","timestamp":"2023-06-30T01:34:46.896Z"}
+{"level":"info","message":"Executed query (SHOW COLUMNS IN users []) in 13.5205ms'","module":"DBInterface","timestamp":"2023-06-30T01:34:46.910Z"}
+{"level":"debug","message":"Database schema successfully validated","module":"boot","timestamp":"2023-06-30T01:34:46.910Z"}
+{"level":"info","message":"Started loading for mart1d4 (1)","module":"player","timestamp":"2023-06-30T01:35:19.155Z"}
+{"level":"info","message":"Executed query (SELECT phone_number FROM users WHERE id = ? LIMIT 1 [\"055adbd7aa571afd0e0c087294faa36ecfe2d6ac\"]) in 2.2043ms'","module":"DBInterface","timestamp":"2023-06-30T01:35:19.158Z"}
+{"level":"debug","message":"Find user for number generation data >","module":"player","timestamp":"2023-06-30T01:35:19.158Z"}
+{"level":"debug","message":[{"phone_number":"253-334-6674"}],"module":"player","timestamp":"2023-06-30T01:35:19.158Z"}
+{"level":"info","message":"NPWD Player Loaded!","module":"player","timestamp":"2023-06-30T01:35:19.159Z"}
+{"level":"debug","message":{"_identifier":"055adbd7aa571afd0e0c087294faa36ecfe2d6ac","_phoneNumber":"253-334-6674","source":1,"username":"mart1d4"},"module":"player","timestamp":"2023-06-30T01:35:19.159Z"}
+{"level":"silly","message":"netPromise > npwd:fetchTweets > RequestObj","module":"events","timestamp":"2023-06-30T01:35:38.191Z"}
+{"level":"silly","message":{"data":{"pageId":0},"source":1},"module":"events","timestamp":"2023-06-30T01:35:38.191Z"}
+{"level":"info","message":"Executed query (\n        SELECT *\n        FROM npwd_twitter_profiles\n        WHERE identifier = ?\n        LIMIT 1\n\t\t [\"055adbd7aa571afd0e0c087294faa36ecfe2d6ac\"]) in 22.5202ms'","module":"DBInterface","timestamp":"2023-06-30T01:35:38.214Z"}
+{"level":"info","message":"Executed query (\n        SELECT \n  npwd_twitter_tweets.id,\n  npwd_twitter_tweets.identifier,\n  npwd_twitter_profiles.id AS profile_id,\n  npwd_twitter_profiles.profile_name,\n  npwd_twitter_profiles.avatar_url,\n  npwd_twitter_tweets.likes,\n  npwd_twitter_tweets.visible,\n  IFNULL(COALESCE(retweets.message, npwd_twitter_tweets.message), '') AS message,\n  IFNULL(COALESCE(retweets.images, npwd_twitter_tweets.images), '') AS images,\n  npwd_twitter_tweets.retweet IS NOT NULL AS isRetweet,\n  retweets.id AS retweetId,\n  retweets_profiles.profile_name AS retweetProfileName,\n  retweets_profiles.avatar_url AS retweetAvatarUrl,\n  npwd_twitter_likes.id IS NOT NULL AS isLiked,\n  npwd_twitter_reports.id IS NOT NULL AS isReported,\n  npwd_twitter_tweets.createdAt,\n  npwd_twitter_tweets.updatedAt,\n  TIME_TO_SEC(TIMEDIFF( NOW(), npwd_twitter_tweets.createdAt)) AS seconds_since_tweet\n\n        FROM npwd_twitter_tweets\n                 LEFT OUTER JOIN npwd_twitter_profiles\n                                 ON npwd_twitter_tweets.identifier = npwd_twitter_profiles.identifier\n                 LEFT OUTER JOIN npwd_twitter_likes ON npwd_twitter_tweets.id = npwd_twitter_likes.tweet_id AND\n                                                       npwd_twitter_likes.profile_id = ?\n                 LEFT OUTER JOIN npwd_twitter_reports ON npwd_twitter_tweets.id = npwd_twitter_reports.tweet_id AND\n                                                         npwd_twitter_reports.profile_id = ?\n                 LEFT OUTER JOIN npwd_twitter_tweets AS retweets ON retweets.id = npwd_twitter_tweets.retweet\n                 LEFT OUTER JOIN npwd_twitter_profiles AS retweets_profiles\n                                 ON retweets.identifier = retweets_profiles.identifier\n        WHERE npwd_twitter_tweets.visible = 1\n        ORDER BY id DESC\n        LIMIT ? OFFSET ?\n\t\t [1,1,\"25\",\"0\"]) in 13.5444ms'","module":"DBInterface","timestamp":"2023-06-30T01:35:38.228Z"}
+{"level":"silly","message":"Response Promise Event npwd:fetchTweets:0fab7b4e-eb69-470b-95a0-32771c443f5a (37.357ms), Data >>","module":"events","timestamp":"2023-06-30T01:35:38.228Z"}
+{"level":"silly","message":{"data":[],"status":"ok"},"module":"events","timestamp":"2023-06-30T01:35:38.228Z"}
+{"level":"silly","message":"netPromise > npwd:getOrCreateTwitterProfile > RequestObj","module":"events","timestamp":"2023-06-30T01:35:38.291Z"}
+{"level":"silly","message":{"data":null,"source":1},"module":"events","timestamp":"2023-06-30T01:35:38.291Z"}
+{"level":"silly","message":"netPromise > phone:getMyProfile > RequestObj","module":"events","timestamp":"2023-06-30T01:35:38.291Z"}
+{"level":"silly","message":{"data":null,"source":1},"module":"events","timestamp":"2023-06-30T01:35:38.291Z"}
+{"level":"silly","message":"netPromise > npwd:fetchMessageGroups > RequestObj","module":"events","timestamp":"2023-06-30T01:35:38.293Z"}
+{"level":"silly","message":{"data":null,"source":1},"module":"events","timestamp":"2023-06-30T01:35:38.293Z"}
+{"level":"silly","message":"netPromise > npwd-contact-getAll > RequestObj","module":"events","timestamp":"2023-06-30T01:35:38.293Z"}
+{"level":"silly","message":{"data":null,"source":1},"module":"events","timestamp":"2023-06-30T01:35:38.294Z"}
+{"level":"info","message":"Executed query (\n        SELECT *\n        FROM npwd_twitter_profiles\n        WHERE identifier = ?\n        LIMIT 1\n\t\t [\"055adbd7aa571afd0e0c087294faa36ecfe2d6ac\"]) in 6.8323ms'","module":"DBInterface","timestamp":"2023-06-30T01:35:38.298Z"}
+{"level":"silly","message":"Response Promise Event npwd:getOrCreateTwitterProfile:bfa2cd25-e91f-4b96-8a2d-8adc4fff8082 (7.5073ms), Data >>","module":"events","timestamp":"2023-06-30T01:35:38.298Z"}
+{"level":"silly","message":{"data":{"avatar_url":"https://i.file.glass/QrEvq.png","createdAt":"2023-06-30T01:33:02.000Z","id":1,"identifier":"055adbd7aa571afd0e0c087294faa36ecfe2d6ac","profile_name":"2533346674","updatedAt":"2023-06-30T01:33:02.000Z"},"status":"ok"},"module":"events","timestamp":"2023-06-30T01:35:38.298Z"}
+{"level":"info","message":"Executed query (\n        SELECT *,\n               UNIX_TIMESTAMP(updatedAt) AS lastActive\n        FROM npwd_match_profiles\n        WHERE identifier = ?\n        LIMIT 1\n\t\t [\"055adbd7aa571afd0e0c087294faa36ecfe2d6ac\"]) in 11.3085ms'","module":"DBInterface","timestamp":"2023-06-30T01:35:38.303Z"}
+{"level":"silly","message":"Response Promise Event phone:getMyProfile:3712140b-ca05-46fc-b490-ac77795fcf74 (12.3914ms), Data >>","module":"events","timestamp":"2023-06-30T01:35:38.304Z"}
+{"level":"info","message":"Executed query (SELECT npwd_messages_conversations.id,\n                          npwd_messages_conversations.conversation_list         as conversationList,\n                          npwd_messages_participants.unread_count               as unreadCount,\n                          npwd_messages_conversations.is_group_chat             as isGroupChat,\n                          npwd_messages_conversations.label,\n                          UNIX_TIMESTAMP(npwd_messages_conversations.updatedAt) as updatedAt,\n                          npwd_messages_participants.participant\n                   FROM npwd_messages_conversations\n                            INNER JOIN npwd_messages_participants\n                                       on npwd_messages_conversations.id = npwd_messages_participants.conversation_id\n                   WHERE npwd_messages_participants.participant = ? [\"253-334-6674\"]) in 11.4749ms'","module":"DBInterface","timestamp":"2023-06-30T01:35:38.305Z"}
+{"level":"info","message":"Executed query (SELECT * FROM npwd_phone_contacts WHERE identifier = ? ORDER BY display ASC [\"055adbd7aa571afd0e0c087294faa36ecfe2d6ac\"]) in 11.4507ms'","module":"DBInterface","timestamp":"2023-06-30T01:35:38.305Z"}
+{"level":"silly","message":{"data":{"bio":"","createdAt":"2023-06-30T01:33:02.000Z","id":1,"identifier":"055adbd7aa571afd0e0c087294faa36ecfe2d6ac","image":"https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg","job":"","lastActive":1688088782,"lastActiveFormatted":"Fri, 30 Jun 2023 01:33:02 GMT","location":"","name":"2533346674","tagList":[],"tags":"","updatedAt":"2023-06-30T01:33:02.000Z","viewed":false,"voiceMessage":null},"status":"ok"},"module":"events","timestamp":"2023-06-30T01:35:38.304Z"}
+{"level":"silly","message":"Response Promise Event npwd:fetchMessageGroups:d4feb8fb-83e7-40c4-819a-68b7def7ac33 (11.8778ms), Data >>","module":"events","timestamp":"2023-06-30T01:35:38.305Z"}
+{"level":"silly","message":{"data":[],"status":"ok"},"module":"events","timestamp":"2023-06-30T01:35:38.305Z"}
+{"level":"silly","message":"Response Promise Event npwd-contact-getAll:f0de4497-258f-4c3f-9927-a765534e7638 (11.8378ms), Data >>","module":"events","timestamp":"2023-06-30T01:35:38.305Z"}
+{"level":"silly","message":{"data":[],"status":"ok"},"module":"events","timestamp":"2023-06-30T01:35:38.305Z"}
+{"level":"info","message":"Executed query (SELECT id FROM npwd_marketplace_listings WHERE identifier = ? [\"055adbd7aa571afd0e0c087294faa36ecfe2d6ac\"]) in 4.7699ms'","module":"DBInterface","timestamp":"2023-06-30T01:48:18.866Z"}
+{"level":"info","message":"Executed query (DELETE FROM npwd_marketplace_listings WHERE identifier = ? AND reported = 0 [\"055adbd7aa571afd0e0c087294faa36ecfe2d6ac\"]) in 1.2262ms'","module":"DBInterface","timestamp":"2023-06-30T01:48:18.867Z"}
+{"level":"info","message":"Unloaded NPWD Player, source: (1)","module":"player","timestamp":"2023-06-30T01:48:18.868Z"}
+{"level":"debug","message":"Boot service started","module":"boot","timestamp":"2023-06-30T01:48:26.328Z"}
+{"level":"debug","message":"Marketplace service started","module":"marketplace","timestamp":"2023-06-30T01:48:26.335Z"}
+{"level":"debug","message":"Player Service started","module":"player","timestamp":"2023-06-30T01:48:26.335Z"}
+{"level":"debug","message":"Call service started","module":"calls","timestamp":"2023-06-30T01:48:26.336Z"}
+{"level":"debug","message":"Messages service started","module":"messages","timestamp":"2023-06-30T01:48:26.337Z"}
+{"level":"debug","message":"Notes service started","module":"notes","timestamp":"2023-06-30T01:48:26.337Z"}
+{"level":"debug","message":"Contacts service started","module":"contact","timestamp":"2023-06-30T01:48:26.337Z"}
+{"level":"debug","message":"Photo service started","module":"photo","timestamp":"2023-06-30T01:48:26.354Z"}
+{"level":"debug","message":"Twitter service started","module":"twitter","timestamp":"2023-06-30T01:48:26.354Z"}
+{"level":"debug","message":"Match service started","module":"match","timestamp":"2023-06-30T01:48:26.355Z"}
+{"level":"debug","message":"Beginning database schema validation","module":"boot","timestamp":"2023-06-30T01:48:28.201Z"}
+{"level":"info","message":"Successfully started","timestamp":"2023-06-30T01:48:28.211Z"}
+{"level":"info","message":"Executed query (SHOW TABLES WHERE `Tables_in_west_coast_dreamin`LIKE ? [\"users\"]) in 489.6688ms'","module":"DBInterface","timestamp":"2023-06-30T01:48:28.691Z"}
+{"level":"info","message":"Executed query (SHOW COLUMNS IN users []) in 26.4961ms'","module":"DBInterface","timestamp":"2023-06-30T01:48:28.718Z"}
+{"level":"debug","message":"Database schema successfully validated","module":"boot","timestamp":"2023-06-30T01:48:28.718Z"}
+{"level":"info","message":"Started loading for mart1d4 (1)","module":"player","timestamp":"2023-06-30T01:49:03.390Z"}
+{"level":"info","message":"Executed query (SELECT phone_number FROM users WHERE id = ? LIMIT 1 [\"055adbd7aa571afd0e0c087294faa36ecfe2d6ac\"]) in 2.0849ms'","module":"DBInterface","timestamp":"2023-06-30T01:49:03.392Z"}
+{"level":"debug","message":"Find user for number generation data >","module":"player","timestamp":"2023-06-30T01:49:03.393Z"}
+{"level":"debug","message":[{"phone_number":"253-334-6674"}],"module":"player","timestamp":"2023-06-30T01:49:03.393Z"}
+{"level":"info","message":"NPWD Player Loaded!","module":"player","timestamp":"2023-06-30T01:49:03.393Z"}
+{"level":"debug","message":{"_identifier":"055adbd7aa571afd0e0c087294faa36ecfe2d6ac","_phoneNumber":"253-334-6674","source":1,"username":"mart1d4"},"module":"player","timestamp":"2023-06-30T01:49:03.393Z"}
+{"level":"silly","message":"netPromise > npwd:fetchTweets > RequestObj","module":"events","timestamp":"2023-06-30T01:49:21.581Z"}
+{"level":"silly","message":{"data":{"pageId":0},"source":1},"module":"events","timestamp":"2023-06-30T01:49:21.581Z"}
+{"level":"info","message":"Executed query (\n        SELECT *\n        FROM npwd_twitter_profiles\n        WHERE identifier = ?\n        LIMIT 1\n\t\t [\"055adbd7aa571afd0e0c087294faa36ecfe2d6ac\"]) in 11.9397ms'","module":"DBInterface","timestamp":"2023-06-30T01:49:21.594Z"}
+{"level":"info","message":"Executed query (\n        SELECT \n  npwd_twitter_tweets.id,\n  npwd_twitter_tweets.identifier,\n  npwd_twitter_profiles.id AS profile_id,\n  npwd_twitter_profiles.profile_name,\n  npwd_twitter_profiles.avatar_url,\n  npwd_twitter_tweets.likes,\n  npwd_twitter_tweets.visible,\n  IFNULL(COALESCE(retweets.message, npwd_twitter_tweets.message), '') AS message,\n  IFNULL(COALESCE(retweets.images, npwd_twitter_tweets.images), '') AS images,\n  npwd_twitter_tweets.retweet IS NOT NULL AS isRetweet,\n  retweets.id AS retweetId,\n  retweets_profiles.profile_name AS retweetProfileName,\n  retweets_profiles.avatar_url AS retweetAvatarUrl,\n  npwd_twitter_likes.id IS NOT NULL AS isLiked,\n  npwd_twitter_reports.id IS NOT NULL AS isReported,\n  npwd_twitter_tweets.createdAt,\n  npwd_twitter_tweets.updatedAt,\n  TIME_TO_SEC(TIMEDIFF( NOW(), npwd_twitter_tweets.createdAt)) AS seconds_since_tweet\n\n        FROM npwd_twitter_tweets\n                 LEFT OUTER JOIN npwd_twitter_profiles\n                                 ON npwd_twitter_tweets.identifier = npwd_twitter_profiles.identifier\n                 LEFT OUTER JOIN npwd_twitter_likes ON npwd_twitter_tweets.id = npwd_twitter_likes.tweet_id AND\n                                                       npwd_twitter_likes.profile_id = ?\n                 LEFT OUTER JOIN npwd_twitter_reports ON npwd_twitter_tweets.id = npwd_twitter_reports.tweet_id AND\n                                                         npwd_twitter_reports.profile_id = ?\n                 LEFT OUTER JOIN npwd_twitter_tweets AS retweets ON retweets.id = npwd_twitter_tweets.retweet\n                 LEFT OUTER JOIN npwd_twitter_profiles AS retweets_profiles\n                                 ON retweets.identifier = retweets_profiles.identifier\n        WHERE npwd_twitter_tweets.visible = 1\n        ORDER BY id DESC\n        LIMIT ? OFFSET ?\n\t\t [1,1,\"25\",\"0\"]) in 13.2236ms'","module":"DBInterface","timestamp":"2023-06-30T01:49:21.607Z"}
+{"level":"silly","message":"Response Promise Event npwd:fetchTweets:90faa6d5-e538-4871-b6d6-cdce5912f197 (26.4845ms), Data >>","module":"events","timestamp":"2023-06-30T01:49:21.608Z"}
+{"level":"silly","message":{"data":[],"status":"ok"},"module":"events","timestamp":"2023-06-30T01:49:21.608Z"}
+{"level":"silly","message":"netPromise > npwd:getOrCreateTwitterProfile > RequestObj","module":"events","timestamp":"2023-06-30T01:49:21.683Z"}
+{"level":"silly","message":{"data":null,"source":1},"module":"events","timestamp":"2023-06-30T01:49:21.683Z"}
+{"level":"silly","message":"netPromise > phone:getMyProfile > RequestObj","module":"events","timestamp":"2023-06-30T01:49:21.684Z"}
+{"level":"silly","message":{"data":null,"source":1},"module":"events","timestamp":"2023-06-30T01:49:21.684Z"}
+{"level":"silly","message":"netPromise > npwd:fetchMessageGroups > RequestObj","module":"events","timestamp":"2023-06-30T01:49:21.686Z"}
+{"level":"silly","message":{"data":null,"source":1},"module":"events","timestamp":"2023-06-30T01:49:21.686Z"}
+{"level":"silly","message":"netPromise > npwd-contact-getAll > RequestObj","module":"events","timestamp":"2023-06-30T01:49:21.686Z"}
+{"level":"silly","message":{"data":null,"source":1},"module":"events","timestamp":"2023-06-30T01:49:21.687Z"}
+{"level":"info","message":"Executed query (\n        SELECT *\n        FROM npwd_twitter_profiles\n        WHERE identifier = ?\n        LIMIT 1\n\t\t [\"055adbd7aa571afd0e0c087294faa36ecfe2d6ac\"]) in 8.0027ms'","module":"DBInterface","timestamp":"2023-06-30T01:49:21.692Z"}
+{"level":"silly","message":"Response Promise Event npwd:getOrCreateTwitterProfile:cf7d6dd8-b502-48cc-a5d8-2d253a460bb1 (8.7062ms), Data >>","module":"events","timestamp":"2023-06-30T01:49:21.692Z"}
+{"level":"silly","message":{"data":{"avatar_url":"https://i.file.glass/QrEvq.png","createdAt":"2023-06-30T01:33:02.000Z","id":1,"identifier":"055adbd7aa571afd0e0c087294faa36ecfe2d6ac","profile_name":"2533346674","updatedAt":"2023-06-30T01:33:02.000Z"},"status":"ok"},"module":"events","timestamp":"2023-06-30T01:49:21.692Z"}
+{"level":"info","message":"Executed query (\n        SELECT *,\n               UNIX_TIMESTAMP(updatedAt) AS lastActive\n        FROM npwd_match_profiles\n        WHERE identifier = ?\n        LIMIT 1\n\t\t [\"055adbd7aa571afd0e0c087294faa36ecfe2d6ac\"]) in 18.8715ms'","module":"DBInterface","timestamp":"2023-06-30T01:49:21.703Z"}
+{"level":"silly","message":"Response Promise Event phone:getMyProfile:6b9c18b7-82e6-4e5b-a4c1-c449d6202f76 (20.0795ms), Data >>","module":"events","timestamp":"2023-06-30T01:49:21.704Z"}
+{"level":"info","message":"Executed query (SELECT npwd_messages_conversations.id,\n                          npwd_messages_conversations.conversation_list         as conversationList,\n                          npwd_messages_participants.unread_count               as unreadCount,\n                          npwd_messages_conversations.is_group_chat             as isGroupChat,\n                          npwd_messages_conversations.label,\n                          UNIX_TIMESTAMP(npwd_messages_conversations.updatedAt) as updatedAt,\n                          npwd_messages_participants.participant\n                   FROM npwd_messages_conversations\n                            INNER JOIN npwd_messages_participants\n                                       on npwd_messages_conversations.id = npwd_messages_participants.conversation_id\n                   WHERE npwd_messages_participants.participant = ? [\"253-334-6674\"]) in 18.6521ms'","module":"DBInterface","timestamp":"2023-06-30T01:49:21.705Z"}
+{"level":"info","message":"Executed query (SELECT * FROM npwd_phone_contacts WHERE identifier = ? ORDER BY display ASC [\"055adbd7aa571afd0e0c087294faa36ecfe2d6ac\"]) in 19.021ms'","module":"DBInterface","timestamp":"2023-06-30T01:49:21.706Z"}
+{"level":"silly","message":{"data":{"bio":"","createdAt":"2023-06-30T01:33:02.000Z","id":1,"identifier":"055adbd7aa571afd0e0c087294faa36ecfe2d6ac","image":"https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg","job":"","lastActive":1688088782,"lastActiveFormatted":"Fri, 30 Jun 2023 01:33:02 GMT","location":"","name":"2533346674","tagList":[],"tags":"","updatedAt":"2023-06-30T01:33:02.000Z","viewed":false,"voiceMessage":null},"status":"ok"},"module":"events","timestamp":"2023-06-30T01:49:21.704Z"}
+{"level":"silly","message":"Response Promise Event npwd:fetchMessageGroups:a1b9d2ec-8fde-432b-9499-82ec2b98a3c2 (19.1244ms), Data >>","module":"events","timestamp":"2023-06-30T01:49:21.705Z"}
+{"level":"silly","message":{"data":[],"status":"ok"},"module":"events","timestamp":"2023-06-30T01:49:21.705Z"}
+{"level":"silly","message":"Response Promise Event npwd-contact-getAll:a97ae6e8-9921-470c-9663-0aa35e3add26 (19.4636ms), Data >>","module":"events","timestamp":"2023-06-30T01:49:21.706Z"}
+{"level":"silly","message":{"data":[],"status":"ok"},"module":"events","timestamp":"2023-06-30T01:49:21.706Z"}
+{"level":"info","message":"Executed query (SELECT id FROM npwd_marketplace_listings WHERE identifier = ? [\"055adbd7aa571afd0e0c087294faa36ecfe2d6ac\"]) in 5.0181ms'","module":"DBInterface","timestamp":"2023-06-30T01:56:54.580Z"}
+{"level":"info","message":"Executed query (DELETE FROM npwd_marketplace_listings WHERE identifier = ? AND reported = 0 [\"055adbd7aa571afd0e0c087294faa36ecfe2d6ac\"]) in 1.5589ms'","module":"DBInterface","timestamp":"2023-06-30T01:56:54.582Z"}
+{"level":"info","message":"Unloaded NPWD Player, source: (1)","module":"player","timestamp":"2023-06-30T01:56:54.582Z"}
+{"level":"debug","message":"Boot service started","module":"boot","timestamp":"2023-06-30T01:57:02.078Z"}
+{"level":"debug","message":"Marketplace service started","module":"marketplace","timestamp":"2023-06-30T01:57:02.084Z"}
+{"level":"debug","message":"Player Service started","module":"player","timestamp":"2023-06-30T01:57:02.084Z"}
+{"level":"debug","message":"Call service started","module":"calls","timestamp":"2023-06-30T01:57:02.085Z"}
+{"level":"debug","message":"Messages service started","module":"messages","timestamp":"2023-06-30T01:57:02.086Z"}
+{"level":"debug","message":"Notes service started","module":"notes","timestamp":"2023-06-30T01:57:02.086Z"}
+{"level":"debug","message":"Contacts service started","module":"contact","timestamp":"2023-06-30T01:57:02.086Z"}
+{"level":"debug","message":"Photo service started","module":"photo","timestamp":"2023-06-30T01:57:02.098Z"}
+{"level":"debug","message":"Twitter service started","module":"twitter","timestamp":"2023-06-30T01:57:02.098Z"}
+{"level":"debug","message":"Match service started","module":"match","timestamp":"2023-06-30T01:57:02.098Z"}
+{"level":"debug","message":"Beginning database schema validation","module":"boot","timestamp":"2023-06-30T01:57:03.900Z"}
+{"level":"info","message":"Successfully started","timestamp":"2023-06-30T01:57:03.908Z"}
+{"level":"info","message":"Executed query (SHOW TABLES WHERE `Tables_in_west_coast_dreamin`LIKE ? [\"users\"]) in 470.592ms'","module":"DBInterface","timestamp":"2023-06-30T01:57:04.371Z"}
+{"level":"info","message":"Executed query (SHOW COLUMNS IN users []) in 15.5592ms'","module":"DBInterface","timestamp":"2023-06-30T01:57:04.387Z"}
+{"level":"debug","message":"Database schema successfully validated","module":"boot","timestamp":"2023-06-30T01:57:04.387Z"}
+{"level":"info","message":"Started loading for mart1d4 (1)","module":"player","timestamp":"2023-06-30T01:59:07.452Z"}
+{"level":"info","message":"Executed query (SELECT phone_number FROM users WHERE id = ? LIMIT 1 [\"055adbd7aa571afd0e0c087294faa36ecfe2d6ac\"]) in 3.524ms'","module":"DBInterface","timestamp":"2023-06-30T01:59:07.457Z"}
+{"level":"debug","message":"Find user for number generation data >","module":"player","timestamp":"2023-06-30T01:59:07.457Z"}
+{"level":"debug","message":[{"phone_number":"253-334-6674"}],"module":"player","timestamp":"2023-06-30T01:59:07.457Z"}
+{"level":"info","message":"NPWD Player Loaded!","module":"player","timestamp":"2023-06-30T01:59:07.457Z"}
+{"level":"debug","message":{"_identifier":"055adbd7aa571afd0e0c087294faa36ecfe2d6ac","_phoneNumber":"253-334-6674","source":1,"username":"mart1d4"},"module":"player","timestamp":"2023-06-30T01:59:07.458Z"}
+{"level":"silly","message":"netPromise > npwd:fetchTweets > RequestObj","module":"events","timestamp":"2023-06-30T01:59:25.401Z"}
+{"level":"silly","message":{"data":{"pageId":0},"source":1},"module":"events","timestamp":"2023-06-30T01:59:25.401Z"}
+{"level":"info","message":"Executed query (\n        SELECT *\n        FROM npwd_twitter_profiles\n        WHERE identifier = ?\n        LIMIT 1\n\t\t [\"055adbd7aa571afd0e0c087294faa36ecfe2d6ac\"]) in 12.012ms'","module":"DBInterface","timestamp":"2023-06-30T01:59:25.414Z"}
+{"level":"info","message":"Executed query (\n        SELECT \n  npwd_twitter_tweets.id,\n  npwd_twitter_tweets.identifier,\n  npwd_twitter_profiles.id AS profile_id,\n  npwd_twitter_profiles.profile_name,\n  npwd_twitter_profiles.avatar_url,\n  npwd_twitter_tweets.likes,\n  npwd_twitter_tweets.visible,\n  IFNULL(COALESCE(retweets.message, npwd_twitter_tweets.message), '') AS message,\n  IFNULL(COALESCE(retweets.images, npwd_twitter_tweets.images), '') AS images,\n  npwd_twitter_tweets.retweet IS NOT NULL AS isRetweet,\n  retweets.id AS retweetId,\n  retweets_profiles.profile_name AS retweetProfileName,\n  retweets_profiles.avatar_url AS retweetAvatarUrl,\n  npwd_twitter_likes.id IS NOT NULL AS isLiked,\n  npwd_twitter_reports.id IS NOT NULL AS isReported,\n  npwd_twitter_tweets.createdAt,\n  npwd_twitter_tweets.updatedAt,\n  TIME_TO_SEC(TIMEDIFF( NOW(), npwd_twitter_tweets.createdAt)) AS seconds_since_tweet\n\n        FROM npwd_twitter_tweets\n                 LEFT OUTER JOIN npwd_twitter_profiles\n                                 ON npwd_twitter_tweets.identifier = npwd_twitter_profiles.identifier\n                 LEFT OUTER JOIN npwd_twitter_likes ON npwd_twitter_tweets.id = npwd_twitter_likes.tweet_id AND\n                                                       npwd_twitter_likes.profile_id = ?\n                 LEFT OUTER JOIN npwd_twitter_reports ON npwd_twitter_tweets.id = npwd_twitter_reports.tweet_id AND\n                                                         npwd_twitter_reports.profile_id = ?\n                 LEFT OUTER JOIN npwd_twitter_tweets AS retweets ON retweets.id = npwd_twitter_tweets.retweet\n                 LEFT OUTER JOIN npwd_twitter_profiles AS retweets_profiles\n                                 ON retweets.identifier = retweets_profiles.identifier\n        WHERE npwd_twitter_tweets.visible = 1\n        ORDER BY id DESC\n        LIMIT ? OFFSET ?\n\t\t [1,1,\"25\",\"0\"]) in 10.2825ms'","module":"DBInterface","timestamp":"2023-06-30T01:59:25.424Z"}
+{"level":"silly","message":"Response Promise Event npwd:fetchTweets:a72016f2-594a-430f-bb10-d0f64801e47e (23.6113ms), Data >>","module":"events","timestamp":"2023-06-30T01:59:25.425Z"}
+{"level":"silly","message":{"data":[],"status":"ok"},"module":"events","timestamp":"2023-06-30T01:59:25.425Z"}
+{"level":"silly","message":"netPromise > npwd:getOrCreateTwitterProfile > RequestObj","module":"events","timestamp":"2023-06-30T01:59:25.503Z"}
+{"level":"silly","message":{"data":null,"source":1},"module":"events","timestamp":"2023-06-30T01:59:25.503Z"}
+{"level":"silly","message":"netPromise > phone:getMyProfile > RequestObj","module":"events","timestamp":"2023-06-30T01:59:25.504Z"}
+{"level":"silly","message":{"data":null,"source":1},"module":"events","timestamp":"2023-06-30T01:59:25.504Z"}
+{"level":"silly","message":"netPromise > npwd:fetchMessageGroups > RequestObj","module":"events","timestamp":"2023-06-30T01:59:25.505Z"}
+{"level":"silly","message":{"data":null,"source":1},"module":"events","timestamp":"2023-06-30T01:59:25.505Z"}
+{"level":"silly","message":"netPromise > npwd-contact-getAll > RequestObj","module":"events","timestamp":"2023-06-30T01:59:25.506Z"}
+{"level":"silly","message":{"data":null,"source":1},"module":"events","timestamp":"2023-06-30T01:59:25.506Z"}
+{"level":"info","message":"Executed query (\n        SELECT *\n        FROM npwd_twitter_profiles\n        WHERE identifier = ?\n        LIMIT 1\n\t\t [\"055adbd7aa571afd0e0c087294faa36ecfe2d6ac\"]) in 6.7217ms'","module":"DBInterface","timestamp":"2023-06-30T01:59:25.510Z"}
+{"level":"silly","message":"Response Promise Event npwd:getOrCreateTwitterProfile:aebd6ce1-9509-4221-98fa-c65d8b0b92bb (7.3682ms), Data >>","module":"events","timestamp":"2023-06-30T01:59:25.511Z"}
+{"level":"silly","message":{"data":{"avatar_url":"https://i.file.glass/QrEvq.png","createdAt":"2023-06-30T01:33:02.000Z","id":1,"identifier":"055adbd7aa571afd0e0c087294faa36ecfe2d6ac","profile_name":"2533346674","updatedAt":"2023-06-30T01:33:02.000Z"},"status":"ok"},"module":"events","timestamp":"2023-06-30T01:59:25.511Z"}
+{"level":"info","message":"Executed query (\n        SELECT *,\n               UNIX_TIMESTAMP(updatedAt) AS lastActive\n        FROM npwd_match_profiles\n        WHERE identifier = ?\n        LIMIT 1\n\t\t [\"055adbd7aa571afd0e0c087294faa36ecfe2d6ac\"]) in 14.7234ms'","module":"DBInterface","timestamp":"2023-06-30T01:59:25.519Z"}
+{"level":"silly","message":"Response Promise Event phone:getMyProfile:6780c329-d0c2-42a9-ae63-0c31917200f1 (15.6999ms), Data >>","module":"events","timestamp":"2023-06-30T01:59:25.519Z"}
+{"level":"info","message":"Executed query (SELECT npwd_messages_conversations.id,\n                          npwd_messages_conversations.conversation_list         as conversationList,\n                          npwd_messages_participants.unread_count               as unreadCount,\n                          npwd_messages_conversations.is_group_chat             as isGroupChat,\n                          npwd_messages_conversations.label,\n                          UNIX_TIMESTAMP(npwd_messages_conversations.updatedAt) as updatedAt,\n                          npwd_messages_participants.participant\n                   FROM npwd_messages_conversations\n                            INNER JOIN npwd_messages_participants\n                                       on npwd_messages_conversations.id = npwd_messages_participants.conversation_id\n                   WHERE npwd_messages_participants.participant = ? [\"253-334-6674\"]) in 15.2422ms'","module":"DBInterface","timestamp":"2023-06-30T01:59:25.520Z"}
+{"level":"silly","message":{"data":{"bio":"","createdAt":"2023-06-30T01:33:02.000Z","id":1,"identifier":"055adbd7aa571afd0e0c087294faa36ecfe2d6ac","image":"https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg","job":"","lastActive":1688088782,"lastActiveFormatted":"Fri, 30 Jun 2023 01:33:02 GMT","location":"","name":"2533346674","tagList":[],"tags":"","updatedAt":"2023-06-30T01:33:02.000Z","viewed":false,"voiceMessage":null},"status":"ok"},"module":"events","timestamp":"2023-06-30T01:59:25.520Z"}
+{"level":"info","message":"Executed query (SELECT * FROM npwd_phone_contacts WHERE identifier = ? ORDER BY display ASC [\"055adbd7aa571afd0e0c087294faa36ecfe2d6ac\"]) in 14.326ms'","module":"DBInterface","timestamp":"2023-06-30T01:59:25.521Z"}
+{"level":"silly","message":"Response Promise Event npwd:fetchMessageGroups:c8f19c91-56e6-4135-b315-be63c82da90d (15.6599ms), Data >>","module":"events","timestamp":"2023-06-30T01:59:25.520Z"}
+{"level":"silly","message":{"data":[],"status":"ok"},"module":"events","timestamp":"2023-06-30T01:59:25.520Z"}
+{"level":"silly","message":"Response Promise Event npwd-contact-getAll:706633ff-29fd-4a34-9722-fceba6efaecc (14.7208ms), Data >>","module":"events","timestamp":"2023-06-30T01:59:25.521Z"}
+{"level":"silly","message":{"data":[],"status":"ok"},"module":"events","timestamp":"2023-06-30T01:59:25.521Z"}
+{"level":"info","message":"Executed query (SELECT id FROM npwd_marketplace_listings WHERE identifier = ? [\"055adbd7aa571afd0e0c087294faa36ecfe2d6ac\"]) in 3.5393ms'","module":"DBInterface","timestamp":"2023-06-30T02:12:55.683Z"}
+{"level":"info","message":"Executed query (DELETE FROM npwd_marketplace_listings WHERE identifier = ? AND reported = 0 [\"055adbd7aa571afd0e0c087294faa36ecfe2d6ac\"]) in 0.896ms'","module":"DBInterface","timestamp":"2023-06-30T02:12:55.684Z"}
+{"level":"info","message":"Unloaded NPWD Player, source: (1)","module":"player","timestamp":"2023-06-30T02:12:55.685Z"}

@@ -21,11 +21,14 @@ RegisterCommand('spawn', function(source, args)
     local playerPed = PlayerPedId()
     local playerCoords = GetEntityCoords(playerPed)
 
-    local x = playerCoords.x 
+    local x = playerCoords.x
     local y = playerCoords.y
     local z = playerCoords.z
 
     local vehicleHash = GetHashKey(vehicleName)
+    if not IsModelInCdimage(vehicleHash) or not IsModelAVehicle(vehicleHash) then
+        print('Invalid vehicle name')
+    end
 
     RequestModel(vehicleHash)
 

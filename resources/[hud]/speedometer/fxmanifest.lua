@@ -1,24 +1,18 @@
-fx_version "cerulean"
+fx_version 'cerulean'
+game 'gta5'
 
-description "Speedometer"
-author "mart1d4"
 version '1.0.0'
-
+author 'mart1d4'
+description 'Speedometer'
 lua54 'yes'
-
-game "gta5"
 
 ui_page 'web/dist/index.html'
 
-shared_scripts {
-	'@system/imports.lua',
-}
+shared_script '@system/imports.lua'
 
-client_script "client/**/*"
-server_script "server/**/*"
+client_script 'client/**/*'
+server_script 'server/**/*'
 
-files {
-	'web/dist/**/*',
-}
+files 'web/dist/**/*'
 
 dependency 'system'

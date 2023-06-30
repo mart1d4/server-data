@@ -109,7 +109,7 @@ AddEventHandler('system:onPlayerJoined', function()
 			SetRandomVehicleDensityMultiplierThisFrame(densityConfig.trafficFrequency)
 			SetParkedVehicleDensityMultiplierThisFrame(densityConfig.trafficFrequency)
 			SetVehicleDensityMultiplierThisFrame(densityConfig.trafficFrequency)
-		  end
+		end
 	end)
 
 	-- Disable Dispatch Services
@@ -130,7 +130,7 @@ RegisterNetEvent('system:createIdentity', function(playerId, xPlayer, isNew)
 		y = coords.y,
 		z = coords.z + 0.05,
 		heading = coords.heading,
-		model = 'messi',
+		model = 'a_f_m_beach_01',
 		skipFade = false
 	}, function()
 		SetEntityVisible(PlayerPedId(), false, 0)
@@ -166,7 +166,7 @@ RegisterNetEvent('system:playerLoaded', function(playerId, xPlayer, isNew)
 		y = System.PlayerData.position.y,
 		z = System.PlayerData.position.z + 0.05,
 		heading = System.PlayerData.position.heading,
-		model = 'messi',
+		model = 'a_f_m_beach_01',
 		skipFade = false
 	}, function()
 		TriggerServerEvent('system:onPlayerSpawn')
@@ -228,7 +228,7 @@ function onDeathEffect()
 	System.SetPlayerData('dead', true)
 
 	StartScreenEffect("DeathFailOut", 0, 0)
-    PlaySoundFrontend(-1, "Bed", "WastedSounds", 1)
+	PlaySoundFrontend(-1, "Bed", "WastedSounds", 1)
 	ShakeGameplayCam("DEATH_FAIL_IN_EFFECT_SHAKE", 1.0)
 
 	local scaleform = RequestScaleformMovie("MP_BIG_MESSAGE_FREEMODE")
@@ -246,10 +246,10 @@ function onDeathEffect()
 
 	PlaySoundFrontend(-1, "TextHit", "WastedSounds", 1)
 
-    while IsEntityDead(PlayerPedId()) do
-        DrawScaleformMovieFullscreen(scaleform, 255, 255, 255, 255)
+	while IsEntityDead(PlayerPedId()) do
+		DrawScaleformMovieFullscreen(scaleform, 255, 255, 255, 255)
 		Citizen.Wait(0)
-    end
+	end
 
 	StopScreenEffect("DeathFailOut")
 end

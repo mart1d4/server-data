@@ -9,17 +9,20 @@ AddEventHandler('playerConnecting', function(name, setCallback, deferrals)
     local identifier = System.GetIdentifier(playerId)
 
     if not System.DatabaseConnected then
-        return deferrals.done(('[System] Connection to the database could not be established.'))
+        deferrals.done(('[System] Connection to the database could not be established.'))
+        return CancelEvent()
     end
-    
+
     if identifier then
         if System.GetPlayerFromIdentifier(identifier) then
-            return deferrals.done('[System] There was an error loading your character.\nError: same identifier ingame')
+            deferrals.done('[System] There was an error loading your character.\nError: same identifier ingame')
+            return CancelEvent()
         else
             return deferrals.done()
         end
     else
-        return deferrals.done('[System] There was an error loading your character.\nError: no identifier')
+        deferrals.done('[System] There was an error loading your character.\nError: no identifier')
+        return CancelEvent()
     end
 end)
 
@@ -77,10 +80,10 @@ function createSystemPlayer(identifier, playerId)
         defaultGroup = "Admin"
     end
 
-    print(('[^2INFO^0] Player ^5%s^0 Has been created in the database.'):format(playerId))
+    print(('[^2INFO^0] Player ^5%s^0 has been created in the database.'):format(playerId))
 
     MySQL.prepare(
-        'INSERT INTO `users` SET `id` = ?, `group` = ?, `position` = ?, `accounts` = ?, `banking` = ?',
+        'INSERT INTO users SET `id` = ?, `group` = ?, `position` = ?, `accounts` = ?, `banking` = ?',
         {
             identifier,
             defaultGroup,
@@ -146,7 +149,6 @@ function loadSystemPlayer(identifier, playerId, isNew)
 
     -- Job
     jobObject, gradeObject = System.Jobs[job], System.Jobs[job].grades[grade]
-    print(json.encode(jobObject) .. ' ' .. json.encode(gradeObject))
 
     userData.job = {
         name = job,
@@ -165,7 +167,7 @@ function loadSystemPlayer(identifier, playerId, isNew)
             if item.count > 0 then
                 userData.carryWeight = userData.carryWeight + (item.weight * item.count)
             end
-    
+
             userData.inventory[name] = item
         end
     end
@@ -232,7 +234,7 @@ function loadSystemPlayer(identifier, playerId, isNew)
     end
 
     xPlayer.updateCoords()
-    print(('[^2INFO^0] Player ^5"%s"^0 has connected to the server. ID: ^5%s^7'):format(xPlayer.name, playerId))
+    print(('[^2INFO^0] Player ^5"%s"^0 has connected to the server with id ^5%s^7.'):format(xPlayer.name, playerId))
 end
 
 RegisterNetEvent('system:identityCreated', function(identity)
@@ -286,7 +288,7 @@ RegisterNetEvent('system:updateVehicleState', function(plate, netId)
                     vehicles[vehicleIndex].position = coords
                     vehicles[vehicleIndex].heading = heading
                     vehicles[vehicleIndex].mileage = mileage
-                    
+
                     vehicles[vehicleIndex].props.dirtLevel = dirtLevel
                     vehicles[vehicleIndex].props.engineHealth = engineHealth
                 end
@@ -302,7 +304,8 @@ end)
 
 RegisterNetEvent('system:createNetVehicle', function(vehicle, makeActive, enterVehicle)
     local playerId = source
-    local coords = type(vehicle.position) ~= 'vector3' and vector3(vehicle.position.x, vehicle.position.y, vehicle.position.z) or vehicle.position
+    local coords = type(vehicle.position) ~= 'vector3' and
+        vector3(vehicle.position.x, vehicle.position.y, vehicle.position.z) or vehicle.position
 
     local netVehicle = CreateVehicleServerSetter(
         GetHashKey(vehicle.model),
@@ -351,29 +354,15 @@ AddEventHandler('playerDropped', function(reason)
             System.Players[playerId] = nil
         end)
 
+        print(('[^2INFO^0] Player ^5"%s"^0 has left the server with id ^5%s^7.'):format(xPlayer.name, playerId)
+
         if Player(playerId).state.activeVehicleNet then
-            -- Delete vehicle
             local vehicle = NetworkGetEntityFromNetworkId(Player(playerId).state.activeVehicleNet)
             if DoesEntityExist(vehicle) then
                 DeleteEntity(vehicle)
             end
         end
     end
-end)
-
-AddEventHandler('system:playerLogout', function(playerId)
-    local xPlayer = System.GetPlayerFromId(playerId)
-
-    if xPlayer then
-        TriggerEvent('system:playerDropped', playerId)
-
-        System.playersByIdentifier[xPlayer.identifier] = nil
-        System.SavePlayer(xPlayer, function()
-            System.Players[playerId] = nil
-        end)
-    end
-
-    TriggerClientEvent("system:onPlayerLogout", playerId)
 end)
 
 -- Base txAdin event when server has scheduled restart

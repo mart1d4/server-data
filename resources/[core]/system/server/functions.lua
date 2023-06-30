@@ -23,6 +23,10 @@ function System.SavePlayer(xPlayer, cb)
             end
         end
     )
+
+    if cb then
+        cb()
+    end
 end
 
 function System.SavePlayers(cb)
@@ -59,9 +63,14 @@ function System.SavePlayers(cb)
                 return
             end
 
-            print(('[^2INFO^7] Saved ^5%s^7 %s over ^5%s^7 ms'):format(#parameters, #parameters > 1 and 'players' or 'player', System.Math.Round((os.time() - startTime) / 1000000, 2)))
+            print(('[^2INFO^7] Saved ^5%s^7 %s over ^5%s^7 ms'):format(#parameters,
+                #parameters > 1 and 'players' or 'player', System.Math.Round((os.time() - startTime) / 1000000, 2)))
         end
     )
+
+    if cb then
+        cb()
+    end
 end
 
 function System.GetPlayerFromId(source)
@@ -129,19 +138,19 @@ function System.GetVehiclePropertiesNet(vehicle)
     local interiorColor = GetVehicleInteriorColour(vehicle)
     local customPrimaryColor = nil
     if hasCustomPrimaryColor then
-        customPrimaryColor = {GetVehicleCustomPrimaryColour(vehicle)}
+        customPrimaryColor = { GetVehicleCustomPrimaryColour(vehicle) }
     end
 
     -- local hasCustomXenonColor, customXenonColorR, customXenonColorG, customXenonColorB = GetVehicleXenonLightsCustomColor(vehicle)
     local customXenonColor = nil
     if hasCustomXenonColor then
-        customXenonColor = {customXenonColorR, customXenonColorG, customXenonColorB}
+        customXenonColor = { customXenonColorR, customXenonColorG, customXenonColorB }
     end
 
     local hasCustomSecondaryColor = GetIsVehicleSecondaryColourCustom(vehicle)
     local customSecondaryColor = nil
     if hasCustomSecondaryColor then
-        customSecondaryColor = {GetVehicleCustomSecondaryColour(vehicle)}
+        customSecondaryColor = { GetVehicleCustomSecondaryColour(vehicle) }
     end
 
     -- local extras = {}
@@ -154,11 +163,11 @@ function System.GetVehiclePropertiesNet(vehicle)
     local doorsBroken, windowsBroken, tyreBurst = {}, {}, {}
     -- local numWheels = tostring(GetVehicleNumberOfWheels(vehicle))
 
-    local TyresIndex = { -- Wheel index list according to the number of vehicle wheels.
-        ['2'] = {0, 4}, -- Bike and cycle.
-        ['3'] = {0, 1, 4, 5}, -- Vehicle with 3 wheels (get for wheels because some 3 wheels vehicles have 2 wheels on front and one rear or the reverse).
-        ['4'] = {0, 1, 4, 5}, -- Vehicle with 4 wheels.
-        ['6'] = {0, 1, 2, 3, 4, 5} -- Vehicle with 6 wheels.
+    local TyresIndex = {           -- Wheel index list according to the number of vehicle wheels.
+        ['2'] = { 0, 4 },          -- Bike and cycle.
+        ['3'] = { 0, 1, 4, 5 },    -- Vehicle with 3 wheels (get for wheels because some 3 wheels vehicles have 2 wheels on front and one rear or the reverse).
+        ['4'] = { 0, 1, 4, 5 },    -- Vehicle with 4 wheels.
+        ['6'] = { 0, 1, 2, 3, 4, 5 } -- Vehicle with 6 wheels.
     }
 
     if TyresIndex[numWheels] then
