@@ -6,8 +6,8 @@ if not IsDuplicityVersion() then
         System.PlayerLoaded = true
     end)
 
-    RegisterNetEvent('system:onPlayerLogout', function()
-        System.PlayerLoaded = false
+    RegisterNetEvent('system:playerDropped', function()
         System.PlayerData = {}
+        System.PlayerLoaded = false
     end)
 end

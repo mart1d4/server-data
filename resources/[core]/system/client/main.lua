@@ -184,8 +184,6 @@ RegisterNetEvent('system:playerLoaded', function(playerId, xPlayer, isNew)
 		ShutdownLoadingScreenNui()
 	end)
 
-
-
 	System.PlayerLoaded = true
 end)
 
@@ -195,7 +193,7 @@ AddEventHandler('system:onPlayerSpawn', function()
 end)
 
 AddEventHandler('baseevents:onPlayerDied', function()
-	Citizen.Wait(5000)
+	Wait(5000)
 	exports.spawn:spawnPlayer(Config.DeathSpawnCoords, function()
 		System.SetPlayerData('dead', false)
 	end)
@@ -205,7 +203,7 @@ AddEventHandler('baseevents:onPlayerDied', function()
 end)
 
 AddEventHandler('baseevents:onPlayerKilled', function()
-	Citizen.Wait(5000)
+	Wait(5000)
 	exports.spawn:spawnPlayer(Config.DeathSpawnCoords, function()
 		System.SetPlayerData('dead', false)
 	end)
@@ -215,7 +213,7 @@ AddEventHandler('baseevents:onPlayerKilled', function()
 end)
 
 AddEventHandler('baseevents:onPlayerWasted', function()
-	Citizen.Wait(5000)
+	Wait(5000)
 	exports.spawn:spawnPlayer(Config.DeathSpawnCoords, function()
 		System.SetPlayerData('dead', false)
 	end)
@@ -233,7 +231,7 @@ function onDeathEffect()
 
 	local scaleform = RequestScaleformMovie("MP_BIG_MESSAGE_FREEMODE")
 	if HasScaleformMovieLoaded(scaleform) then
-		Citizen.Wait(0)
+		Wait(0)
 	end
 
 	PushScaleformMovieFunction(scaleform, "SHOW_SHARD_WASTED_MP_MESSAGE")
@@ -242,13 +240,13 @@ function onDeathEffect()
 	EndTextComponent()
 	PopScaleformMovieFunctionVoid()
 
-	Citizen.Wait(500)
+	Wait(500)
 
 	PlaySoundFrontend(-1, "TextHit", "WastedSounds", 1)
 
 	while IsEntityDead(PlayerPedId()) do
 		DrawScaleformMovieFullscreen(scaleform, 255, 255, 255, 255)
-		Citizen.Wait(0)
+		Wait(0)
 	end
 
 	StopScreenEffect("DeathFailOut")
