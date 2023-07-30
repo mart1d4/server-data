@@ -3,7 +3,7 @@ game 'gta5'
 
 version '1.0.0'
 author 'mart1d4'
-description 'All the core logic for the server, initialized on startup.'
+description 'All the core logic for the server.'
 lua54 'yes'
 
 shared_script 'shared/config.lua'

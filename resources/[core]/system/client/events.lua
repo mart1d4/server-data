@@ -11,19 +11,6 @@ RegisterNetEvent('system:helpText', function(playerId, message)
     DrawNotification(true, false)
 end)
 
-RegisterNetEvent('system:setAccountMoney', function(account)
-    local accounts = System.PlayerData.accounts
-    
-	for i = 1, #(accounts) do
-		if accounts[i].label == account.label then
-			accounts[i] = account
-			break
-		end
-	end
-
-	System.SetPlayerData('accounts', accounts)
-end)
-
-RegisterNetEvent('system:setVehicles', function(vehicles)
-    System.SetPlayerData('vehicles', vehicles)
+RegisterNetEvent('system:playerUpdated', function(type, data)
+    System.SetPlayerData(type, data)
 end)

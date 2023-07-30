@@ -1,9 +1,3 @@
-local SetTimeout = SetTimeout
-local GetPlayerPed = GetPlayerPed
-local DoesEntityExist = DoesEntityExist
-local GetEntityCoords = GetEntityCoords
-local GetEntityHeading = GetEntityHeading
-
 function CreatePlayer(
 	playerId,
 	identifier,
@@ -42,7 +36,7 @@ function CreatePlayer(
 		'license:' .. self.identifier,
 		self.group
 	))
-	
+
 	local stateBag = Player(self.playerId).state
 	stateBag:set('name', self.name, true)
 	stateBag:set('group', self.group, true)
@@ -52,17 +46,6 @@ function CreatePlayer(
 		TriggerClientEvent(eventName, self.playerId, ...)
 	end
 
-	function self.setCoords(coords)
-		local ped = GetPlayerPed(-1)
-
-		if not type(coords) == 'vector4' then
-			print('Invalid Coords Type')
-		end
-
-		SetEntityCoords(ped, coords.xyz, false, false, false, false)
-		SetEntityHeading(ped, coords.w)
-	end
-
 	function self.updateCoords()
 		SetTimeout(500, function()
 			local ped = GetPlayerPed(self.playerId)
@@ -70,14 +53,15 @@ function CreatePlayer(
 			if DoesEntityExist(ped) then
 				local coords = GetEntityCoords(ped)
 				local distance = #(coords - vector3(self.position.x, self.position.y, self.position.z))
+
 				if distance > 0.5 then
 					local heading = GetEntityHeading(ped)
-					
+
 					self.position = {
 						x = coords.x,
 						y = coords.y,
 						z = coords.z,
-						heading = heading or 0.0,
+						heading = heading,
 					}
 				end
 			end
@@ -105,177 +89,98 @@ function CreatePlayer(
 		))
 	end
 
-	function self.getAccount(account)
-		return self.accounts[account]
+	-- Accounts
+	function getTotalMoney()
+		local total = 0
+
+		for _, v in pairs(self.accounts) do
+			total = total + v
+		end
+
+		return total
 	end
 
-	function self.getMoney(accountName)
-		local account = self.getAccount(accountName)
-
-		if account then
-			return account.money
-		end
-	end
-
-	function self.getFullMoney()
-		local money = 0
-
-		for i = 1, #self.accounts do
-			money = money + self.accounts[i].money
-		end
-
-		return money
-	end
-
-	function self.setAccountMoney(accountName, money, reason)
-		reason = reason or 'Unknown'
-        
-		if not tonumber(money) then 
-			print('Invalid Money Type')
-			return
-		end
-
-		if money >= 0 then
-			local account = self.getAccount(accountName)
-
-			if account then
-				money = System.Math.Round(money)
-				self.accounts[accountName].balance = money
-
-				self.triggerEvent('system:setAccountMoney', account)
-				TriggerEvent('system:setAccountMoney', self.playerId, accountName, money, reason)
-			else 
-				print('Invalid Account Name')
-			end
-		else 
-			print('Invalid Money Amount')
-		end
-	end
-
-	function self.addAccountMoney(accountName, money, reason)
-		reason = reason or 'Unknown'
-
-		if not tonumber(money) then 
-			print('Invalid Money Type')
-			return
-		end
-
-		if money > 0 then
-			local account = self.getAccount(accountName)
-			if account then
-				money = System.Math.Round(money)
-				self.accounts[accountName].balance += money
-
-				self.triggerEvent('system:setAccountMoney', account)
-				TriggerEvent('system:setAccountMoney', self.playerId, accountName, money, reason)
-			else 
-				print('Invalid Account Name')
-			end
-		else 
-			print('Invalid Money Amount')
-		end
-	end
-
-	function self.removeAccountMoney(accountName, money, reason)
-		reason = reason or 'Unknown'
-
-		if not tonumber(money) then 
-			print('Invalid Money Type')
-			return
-		end
-
-		if money > 0 then
-			local account = self.getAccount(accountName)
-
-			if account then
-				money = System.Math.Round(money)
-				self.accounts[accountName].balance -= money
-
-				self.triggerEvent('system:setAccountMoney', account)
-				TriggerEvent('system:setAccountMoney', self.playerId, accountName, money, reason)
-			else 
-				print('Invalid Account Name')
-			end
-		else 
-			print('Invalid Money Amount')
-		end
-	end
-
-	function self.setBanking(field, value, add)
-		if add then
-			if type(self.banking[field]) == 'table' then
-				local index = #self.banking[field] + 1
-				self.banking[field][index] = value
-			else
-				self.banking[field] += value
-			end
-		else
-			self.banking[field] = value
-		end
-	end
-
-	function self.getInventoryItem(name)
-		for k, item in ipairs(self.inventory) do
-			if itemv.name == name then
-				return item
+	function getAccountMoney(account)
+		for k, v in pairs(self.accounts) do
+			if k == account then
+				return v
 			end
 		end
+
+		return nil
 	end
 
-	function self.addInventoryItem(name, count)
-		local item = self.getInventoryItem(name)
-
-		if item then
-			count = System.Math.Round(count)
-			item.count = item.count + count
-			self.weight = self.weight + (item.weight * count)
-
-			self.triggerEvent('system:addedInventoryItem', item.name, item.count)
-			TriggerEvent('system:onAddInventoryItem', self.playerId, item.name, item.count)
+	function setAccountMoney(account, amount)
+		if not tonumber(amount) then
+			print('[Player:SetAccountMoney] Invalid Money Type')
+			return nil
 		end
+
+		if getAccountMoney(account) ~= nil and amount > 0 then
+			accounts[account] = System.Math.Round(amount)
+
+			self.triggerEvent('system:playerUpdated', 'accounts', self.accounts)
+			TriggerEvent('system:playerUpdated', self.playerId)
+
+			return amount
+		end
+
+		return nil
 	end
 
-	function self.removeInventoryItem(name, count)
-		local item = self.getInventoryItem(name)
+	function addAccountMoney(account, amount)
+		if not tonumber(amount) then
+			print('[Player:AddAccountMoney] Invalid Money Type')
+			return nil
+		end
 
-		if item then
-			count = System.Math.Round(count)
-			if count > 0 then
-				local newCount = item.count - count
+		if getAccountMoney(account) ~= nil and amount > 0 then
+			accounts[account] = accounts[account] + System.Math.Round(amount)
 
-				if newCount >= 0 then
-					item.count = newCount
-					self.weight = self.weight - (item.weight * count)
+			self.triggerEvent('system:playerUpdated', 'accounts', self.accounts)
+			TriggerEvent('system:playerUpdated', self.playerId)
 
-					self.triggerEvent('system:removedInventoryItem', item.name, item.count)
-					TriggerEvent('system:onRemoveInventoryItem', self.playerId, item.name, item.count)
-				end
-			else
-				print('Invalid Count')
+			return accounts[account]
+		end
+
+		return nil
+	end
+
+	function removeAccountMoney(account, amount)
+		if not tonumber(amount) then
+			print('[Player:RemoveAccountMoney] Invalid Money Type')
+			return nil
+		end
+
+		if getAccountMoney(account) ~= nil and amount > 0 then
+			if accounts[account] - amount >= 0 then
+				accounts[account] = accounts[account] - System.Math.Round(amount)
+
+				self.triggerEvent('system:playerUpdated', 'accounts', self.accounts)
+				TriggerEvent('system:playerUpdated', self.playerId)
+
+				return accounts[account]
 			end
 		end
+
+		return nil
 	end
 
-	function self.setInventoryItem(name, count)
-		local item = self.getInventoryItem(name)
+	-- Banking
+	function self.addBankingTransaction(transaction)
+		table.insert(self.banking.transactionHistory, transaction)
 
-		if item and count >= 0 then
-			count = System.Math.Round(count)
-
-			if count > item.count then
-				self.addInventoryItem(item.name, count - item.count)
-			else
-				self.removeInventoryItem(item.name, item.count - count)
-			end
-		end
+		self.triggerEvent('system:playerUpdated', 'banking', self.banking)
+		TriggerEvent('system:playerUpdated', self.playerId)
 	end
 
+	-- Vehicles
 	function self.addVehicle(vehicle, makeActive)
 		table.insert(self.vehicles, vehicle)
 
 		if makeActive then
 			for _, v in ipairs(self.vehicles) do
-				if v == vehicle then
+				if v.plate == vehicle.plate then
 					v.state.active = true
 					break
 				else
@@ -284,8 +189,8 @@ function CreatePlayer(
 			end
 		end
 
-		self.triggerEvent('system:setVehicles', self.vehicles)
-		TriggerEvent('system:setVehicles', self.playerId, self.vehicles)
+		self.triggerEvent('system:playerUpdated', 'vehicles', self.vehicles)
+		TriggerEvent('system:playerUpdated', self.playerId)
 	end
 
 	function self.removeVehicle(plate)
@@ -296,63 +201,122 @@ function CreatePlayer(
 			end
 		end
 
-		self.triggerEvent('system:setVehicles', self.vehicles)
-		TriggerEvent('system:setVehicles', self.playerId, self.vehicles)
+		self.triggerEvent('system:playerUpdated', 'vehicles', self.vehicles)
+		TriggerEvent('system:playerUpdated', self.playerId)
 	end
 
-	function self.setVehicles(vehicleList)
-		self.vehicles = vehicleList
-
-		self.triggerEvent('system:setVehicles', self.vehicles)
-		TriggerEvent('system:setVehicles', self.playerId, self.vehicles)
+	-- Items
+	function getItemPrice(item)
+		return self.inventory[item]["Price"]
 	end
 
-	function self.canCarryItem(name, count)
-        if System.Items[name] then
-            local currentWeight, itemWeight = self.weight, System.Items[name].weight
-            local newWeight = currentWeight + (itemWeight * count)
-
-            return newWeight <= self.maxWeight
-        else
-            print('Invalid Item Name')
-        end
+	function getItemAmount(item)
+		return self.inventory[item]["Amount"]
 	end
 
+	function getItemWeight(item)
+		return self.inventory[item]["Weight"]
+	end
+
+	function getItemDescription(item)
+		return self.inventory[item]["Description"]
+	end
+
+	function getItemsWeight()
+		local total = 0
+
+		for _, v in pairs(self.inventory) do
+			total = total + v["Weight"]
+		end
+
+		return total
+	end
+
+	function getItemsPrice()
+		local total = 0
+
+		for _, v in pairs(self.inventory) do
+			total = total + v["Price"]
+		end
+
+		return total
+	end
+
+	function getItemsCount()
+		local total = 0
+
+		for _, v in pairs(self.inventory) do
+			total = total + v["Amount"]
+		end
+
+		return total
+	end
+
+	function addItem(item, amount)
+		if self.inventory[item] ~= nil then
+			if getItemsWeight() + amount <= self.carryWeight then
+				self.inventory[item]["Amount"] = self.inventory[item]["Amount"] + amount
+
+				self.triggerEvent('system:playerUpdated', 'inventory', self.inventory)
+				TriggerEvent('system:playerUpdated', self.playerId)
+
+				return self.inventory[item]["Amount"]
+			end
+		end
+
+		return nil
+	end
+
+	function removeItem(item, amount)
+		if self.inventory[item] ~= nil then
+			if self.inventory[item]["Amount"] - amount >= 0 then
+				self.inventory[item]["Amount"] = self.inventory[item]["Amount"] - amount
+
+				self.triggerEvent('system:playerUpdated', 'inventory', self.inventory)
+				TriggerEvent('system:playerUpdated', self.playerId)
+
+				return self.inventory[item]["Amount"]
+			end
+		end
+
+		return nil
+	end
+
+	-- Weight
 	function self.setMaxWeight(newWeight)
-		self.maxWeight = newWeight
-		self.triggerEvent('system:updatedMaxWeight', self.maxWeight)
+		if not tonumber(newWeight) then
+			print('[Player:SetMaxWeight] Invalid Weight Type')
+			return nil
+		end
+
+		if newWeight > 0 then
+			self.maxWeight = newWeight
+			self.triggerEvent('system:playerUpdated', 'maxWeight', self.maxWeight)
+			TriggerEvent('system:playerUpdated', self.playerId)
+
+			return self.maxWeight
+		end
 	end
 
-	function self.setJob(job, grade)
+	-- Jobs
+	function self.setJob(jobName, grade)
 		grade = tostring(grade)
-		local lastJob = self.job
 
-		if System.DoesJobExist(job, grade) then
-			local jobObject, gradeObject = System.Jobs[job], System.Jobs[job].grades[grade]
+		if System.Jobs[jobName] ~= nil then
+			local jobObject, gradeObject = System.Jobs[jobName], System.Jobs[jobName].grades[grade]
 
 			self.job = {
-				id = jobObject.id,
 				name = jobObject.name,
-				label = jobObject.label,
 				grade = tonumber(grade),
 				gradeName = gradeObject.name,
-				gradeSalary = gradeObject.salary,
+				salary = gradeObject.salary,
 			}
 
-			if gradeObject.skinMale then
-				self.job.skinMale = json.decode(gradeObject.skinMale)
-			else
-				self.job.skinMale = {}
-			end
+			self.job.skinMale = json.decode(gradeObject.skinMale) or {}
+			self.job.skinFemale = json.decode(gradeObject.skinFemale) or {}
 
-			if gradeObject.skin_female then
-				self.job.skinFemale = json.decode(gradeObject.skinFemale)
-			else
-				self.job.skinFemale = {}
-			end
-
-			self.triggerEvent('system:updatedJob', self.job, lastJob)
-			TriggerEvent('system:setJob', self.playerId, self.job, lastJob)
+			self.triggerEvent('system:playerUpdated', 'job', self.job)
+			TriggerEvent('system:playerUpdated', self.playerId)
 
 			Player(self.playerId).state:set('job', self.job, true)
 		else
@@ -360,176 +324,10 @@ function CreatePlayer(
 		end
 	end
 
-	function self.addWeapon(weaponName, ammo)
-		if not self.hasWeapon(weaponName) then
-			local weaponLabel = System.GetWeaponLabel(weaponName)
-			local weapon = {
-				name = weaponName,
-				ammo = ammo,
-				label = weaponLabel,
-				components = {},
-				tintIndex = 0
-			}
-
-			table.insert(self.loadout, weapon)
-
-			self.triggerEvent('system:addedWeapon', weapon)
-			GiveWeaponToPed(GetPlayerPed(self.playerId), joaat(weaponName), ammo, false, false)
-		end
-	end
-
-	function self.addWeaponComponent(weaponName, weaponComponent)
-		local loadoutNum, weapon = self.getWeapon(weaponName)
-
-		if weapon then
-			local component = System.GetWeaponComponent(weaponName, weaponComponent)
-
-			if component then
-				if not self.hasWeaponComponent(weaponName, weaponComponent) then
-					self.loadout[loadoutNum].components[#self.loadout[loadoutNum].components + 1] = weaponComponent
-					local componentHash = System.GetWeaponComponent(weaponName, weaponComponent).hash
-
-					self.triggerEvent('system:addedWeaponComponent', weaponName, weaponComponent)
-					GiveWeaponComponentToPed(GetPlayerPed(self.playerId), joaat(weaponName), componentHash)
-				end
-			end
-		end
-	end
-
-	function self.addWeaponAmmo(weaponName, ammoCount)
-		local loadoutNum, weapon = self.getWeapon(weaponName)
-
-		if weapon then
-			weapon.ammo = weapon.ammo + ammoCount
-			SetPedAmmo(GetPlayerPed(self.playerId), joaat(weaponName), weapon.ammo)
-		end
-	end
-
-	function self.updateWeaponAmmo(weaponName, ammoCount)
-		local loadoutNum, weapon = self.getWeapon(weaponName)
-
-		if weapon then
-			weapon.ammo = ammoCount
-		end
-	end
-
-	function self.setWeaponTint(weaponName, weaponTintIndex)
-		local loadoutNum, weapon = self.getWeapon(weaponName)
-
-		if weapon then
-			local weaponNum, weaponObject = System.GetWeapon(weaponName)
-
-			if weaponObject.tints and weaponObject.tints[weaponTintIndex] then
-				self.loadout[loadoutNum].tintIndex = weaponTintIndex
-				self.triggerEvent('system:updatedWeaponTint', weaponName, weaponTintIndex)
-			end
-		end
-	end
-
-	function self.getWeaponTint(weaponName)
-		local loadoutNum, weapon = self.getWeapon(weaponName)
-
-		if weapon then
-			return weapon.tintIndex
-		end
-
-		return 0
-	end
-
-	function self.removeWeapon(weaponName)
-		local weaponLabel
-
-		for k,v in ipairs(self.loadout) do
-			if v.name == weaponName then
-				weaponLabel = v.label
-
-				for k2,v2 in ipairs(v.components) do
-					self.removeWeaponComponent(weaponName, v2)
-				end
-
-				table.remove(self.loadout, k)
-				break
-			end
-		end
-
-		if weaponLabel then
-			self.triggerEvent('system:removedWeapon', weaponName)
-		end
-	end
-
-	function self.removeWeaponComponent(weaponName, weaponComponent)
-		local loadoutNum, weapon = self.getWeapon(weaponName)
-
-		if weapon then
-			local component = System.GetWeaponComponent(weaponName, weaponComponent)
-
-			if component then
-				if self.hasWeaponComponent(weaponName, weaponComponent) then
-					for k,v in ipairs(self.loadout[loadoutNum].components) do
-						if v == weaponComponent then
-							table.remove(self.loadout[loadoutNum].components, k)
-							break
-						end
-					end
-
-					self.triggerEvent('system:removedWeaponComponent', weaponName, weaponComponent)
-				end
-			end
-		end
-	end
-
-	function self.removeWeaponAmmo(weaponName, ammoCount)
-		local loadoutNum, weapon = self.getWeapon(weaponName)
-
-		if weapon then
-			weapon.ammo = weapon.ammo - ammoCount
-			self.triggerEvent('system:setWeaponAmmo', weaponName, weapon.ammo)
-		end
-	end
-
-	function self.hasWeaponComponent(weaponName, weaponComponent)
-		local loadoutNum, weapon = self.getWeapon(weaponName)
-
-		if weapon then
-			for k,v in ipairs(weapon.components) do
-				if v == weaponComponent then
-					return true
-				end
-			end
-
-			return false
-		else
-			return false
-		end
-	end
-
-	function self.hasWeapon(weaponName)
-		for k,v in ipairs(self.loadout) do
-			if v.name == weaponName then
-				return true
-			end
-		end
-
-		return false
-	end
-
-	function self.hasItem(item, metadata)
-		for k,v in ipairs(self.inventory) do
-			if (v.name == item) and (v.count >= 1) then
-				return v, v.count
-			end
-		end
-
-		return false
-	end
-
-	function self.getWeapon(weaponName)
-		for k,v in ipairs(self.loadout) do
-			if v.name == weaponName then
-				return k, v
-			end
-		end
-	end
+	-- Weapons
+	--
+	--
+	--
 
 	return self
 end

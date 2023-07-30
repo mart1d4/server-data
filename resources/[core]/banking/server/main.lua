@@ -3,7 +3,7 @@ local playerData = {}
 
 AddEventHandler('onResourceStart', function(resourceName)
     if (GetCurrentResourceName() ~= resourceName) then return end
-    
+
     for i = 1, #Config.Peds do
         local model = Config.Peds[i].Model
         local coords = Config.Peds[i].Position
@@ -29,9 +29,7 @@ end)
 
 RegisterServerEvent("banking:getPlayerData", function()
     local xPlayer = System.GetPlayerFromId(source)
-    local identifier = xPlayer.identifier
-    local weekAgo = (os.time() - 604800) * 1000
-    
+
     playerData = {
         name = xPlayer.name,
         cash = xPlayer.getAccount('cash'),
@@ -41,7 +39,7 @@ RegisterServerEvent("banking:getPlayerData", function()
         pincode = xPlayer.banking.cardPincode,
         transactionHistory = xPlayer.banking.transactionHistory,
     }
-    
+
     TriggerClientEvent('banking:usePlayerData', source, playerData)
 end)
 
@@ -62,7 +60,6 @@ RegisterServerEvent("banking:withdraw", function(amount, message)
         playerData.bank = xPlayer.getAccount('bank')
         playerData.transactionHistory = xPlayer.banking.transactionHistory
 
-        TriggerClientEvent('banking:updateData', source, playerData)
         TriggerClientEvent('banking:sendValidation', source, {
             type = 'withdraw',
             message = 'Successfully withdrew $' .. amount .. ' from your bank account.',
@@ -152,7 +149,7 @@ RegisterServerEvent("banking:pincode", function(pincode)
     if string.len(pincode) == 4 then
         xPlayer.setBanking('cardPincode', pincode)
         playerData.pincode = pincode
-        
+
         TriggerClientEvent('banking:updateData', playerId, playerData)
         xPlayer.triggerEvent(
             'system:notify',
@@ -163,7 +160,7 @@ RegisterServerEvent("banking:pincode", function(pincode)
             'CHAR_BANK_MAZE',
             2
         )
-        
+
         MySQL.update.await(
             'UPDATE users SET banking = ? WHERE id = ?',
             {

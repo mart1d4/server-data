@@ -10,42 +10,8 @@ function System.SetPlayerData(key, val)
     System.PlayerData[key] = val
 end
 
-function System.Game.Teleport(entity, coords)
-    if not type(coords) == 'vector4' then
-        return
-    end
-
-    if DoesEntityExist(entity) then
-        RequestCollisionAtCoord(coords.xyz)
-
-        while not HasCollisionLoadedAroundEntity(entity) do
-            Wait(0)
-        end
-
-        if IsPedInAnyVehicle(entity, false) and GetPedInVehicleSeat(entity, -1) == entity then
-            local vehicle = GetVehiclePedIsIn(entity, false)
-            SetEntityCoords(vehicle, coords.xyz, false, false, false, false)
-            SetEntityHeading(vehicle, coords.w)
-            FreezeEntityPosition(vehicle, false)
-        else
-            SetEntityCoords(entity, coords.xyz, false, false, false, false)
-            SetEntityHeading(entity, coords.w)
-        end
-    end
-end
-
-function System.Game.TeleportWaypoint(entity)
-    local waypoint = GetFirstBlipInfoId(8)
-
-    if DoesBlipExist(waypoint) then
-        local coords = GetBlipInfoIdCoord(waypoint)
-
-        System.Game.Teleport(entity, coords)
-    end
-end
-
 function System.SpawnActiveVehicle(enterVehicle)
-	if System.PlayerData.vehicles and #System.PlayerData.vehicles > 0 then
+    if System.PlayerData.vehicles and #System.PlayerData.vehicles > 0 then
         local vehicle = nil
 
         for _, v in pairs(System.PlayerData.vehicles) do
@@ -62,9 +28,9 @@ function System.SpawnActiveVehicle(enterVehicle)
             return
         end
 
-		-- Create vehicle
+        -- Create vehicle
         TriggerServerEvent('system:createNetVehicle', vehicle, true, enterVehicle)
-	end
+    end
 end
 
 RegisterNetEvent('system:vehicleCreated', function(netId, vehicle, enterVehicle)
@@ -120,7 +86,7 @@ RegisterNetEvent('system:vehicleCreated', function(netId, vehicle, enterVehicle)
                     BeginTextCommandSetBlipName('STRING')
                     AddTextComponentString('Your Vehicle')
                     EndTextCommandSetBlipName(blip)
-                    
+
                     hasBeenRemoved = false
                 end
             end
@@ -152,19 +118,20 @@ function System.GetVehicleProperties(vehicle)
     local interiorColor = GetVehicleInteriorColour(vehicle)
     local customPrimaryColor = nil
     if hasCustomPrimaryColor then
-        customPrimaryColor = {GetVehicleCustomPrimaryColour(vehicle)}
+        customPrimaryColor = { GetVehicleCustomPrimaryColour(vehicle) }
     end
 
-    local hasCustomXenonColor, customXenonColorR, customXenonColorG, customXenonColorB = GetVehicleXenonLightsCustomColor(vehicle)
+    local hasCustomXenonColor, customXenonColorR, customXenonColorG, customXenonColorB = GetVehicleXenonLightsCustomColor(
+    vehicle)
     local customXenonColor = nil
-    if hasCustomXenonColor then 
-        customXenonColor = {customXenonColorR, customXenonColorG, customXenonColorB}
+    if hasCustomXenonColor then
+        customXenonColor = { customXenonColorR, customXenonColorG, customXenonColorB }
     end
-    
+
     local hasCustomSecondaryColor = GetIsVehicleSecondaryColourCustom(vehicle)
     local customSecondaryColor = nil
     if hasCustomSecondaryColor then
-        customSecondaryColor = {GetVehicleCustomSecondaryColour(vehicle)}
+        customSecondaryColor = { GetVehicleCustomSecondaryColour(vehicle) }
     end
 
     local extras = {}
@@ -177,11 +144,11 @@ function System.GetVehicleProperties(vehicle)
     local doorsBroken, windowsBroken, tyreBurst = {}, {}, {}
     local numWheels = tostring(GetVehicleNumberOfWheels(vehicle))
 
-    local TyresIndex = { -- Wheel index list according to the number of vehicle wheels.
-        ['2'] = {0, 4}, -- Bike and cycle.
-        ['3'] = {0, 1, 4, 5}, -- Vehicle with 3 wheels (get for wheels because some 3 wheels vehicles have 2 wheels on front and one rear or the reverse).
-        ['4'] = {0, 1, 4, 5}, -- Vehicle with 4 wheels.
-        ['6'] = {0, 1, 2, 3, 4, 5} -- Vehicle with 6 wheels.
+    local TyresIndex = {           -- Wheel index list according to the number of vehicle wheels.
+        ['2'] = { 0, 4 },          -- Bike and cycle.
+        ['3'] = { 0, 1, 4, 5 },    -- Vehicle with 3 wheels (get for wheels because some 3 wheels vehicles have 2 wheels on front and one rear or the reverse).
+        ['4'] = { 0, 1, 4, 5 },    -- Vehicle with 4 wheels.
+        ['6'] = { 0, 1, 2, 3, 4, 5 } -- Vehicle with 6 wheels.
     }
 
     if TyresIndex[numWheels] then
@@ -222,7 +189,7 @@ function System.GetVehicleProperties(vehicle)
 
         pearlescentColor = pearlescentColor,
         wheelColor = wheelColor,
-        
+
         dashboardColor = dashboardColor,
         interiorColor = interiorColor,
 
@@ -231,8 +198,8 @@ function System.GetVehicleProperties(vehicle)
         xenonColor = GetVehicleXenonLightsColor(vehicle),
         customXenonColor = customXenonColor,
 
-        neonEnabled = {IsVehicleNeonLightEnabled(vehicle, 0), IsVehicleNeonLightEnabled(vehicle, 1),
-                        IsVehicleNeonLightEnabled(vehicle, 2), IsVehicleNeonLightEnabled(vehicle, 3)},
+        neonEnabled = { IsVehicleNeonLightEnabled(vehicle, 0), IsVehicleNeonLightEnabled(vehicle, 1),
+            IsVehicleNeonLightEnabled(vehicle, 2), IsVehicleNeonLightEnabled(vehicle, 3) },
 
         neonColor = table.pack(GetVehicleNeonLightsColour(vehicle)),
         extras = extras,

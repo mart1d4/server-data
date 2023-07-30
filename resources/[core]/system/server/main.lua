@@ -15,13 +15,13 @@ AddEventHandler('playerConnecting', function(name, setCallback, deferrals)
 
     if identifier then
         if System.GetPlayerFromIdentifier(identifier) then
-            deferrals.done('[System] There was an error loading your character.\nError: same identifier ingame')
+            deferrals.done('[System] There was an error loading your character.')
             return CancelEvent()
         else
             return deferrals.done()
         end
     else
-        deferrals.done('[System] There was an error loading your character.\nError: no identifier')
+        deferrals.done('[System] There was an error loading your character.')
         return CancelEvent()
     end
 end)
@@ -45,7 +45,7 @@ function onPlayerJoined(playerId)
 
     if identifier then
         if System.GetPlayerFromIdentifier(identifier) then
-            DropPlayer(playerId, 'There was an error loading your character.\nError: same identifier ingame')
+            DropPlayer(playerId, 'There was an error loading your character.')
         else
             local result = MySQL.scalar.await('SELECT 1 FROM users WHERE id = ?', { identifier })
             if result then
@@ -55,12 +55,11 @@ function onPlayerJoined(playerId)
             end
         end
     else
-        DropPlayer(playerId, 'There was an error loading your character.\nError: no identifier')
+        DropPlayer(playerId, 'There was an error loading your character.')
     end
 end
 
 function createSystemPlayer(identifier, playerId)
-    local accounts = {}
     local banking = {
         cardNumber = System.GetRandomCardNumber(),
         cardExpiration = System.GetRandomCardExpiration(),
@@ -68,19 +67,10 @@ function createSystemPlayer(identifier, playerId)
         transactionHistory = {}
     }
 
-    for name, account in pairs(Config.Accounts) do
-        accounts[name] = {
-            label = account.label,
-            balance = Config.StartingAccountMoney[name] or 0
-        }
-    end
-
     local defaultGroup = "User"
     if System.IsPlayerAdmin(playerId) then
         defaultGroup = "Admin"
     end
-
-    print(('[^2INFO^0] Player ^5%s^0 has been created in the database.'):format(playerId))
 
     MySQL.prepare(
         'INSERT INTO users SET `id` = ?, `group` = ?, `position` = ?, `accounts` = ?, `banking` = ?',
@@ -88,10 +78,11 @@ function createSystemPlayer(identifier, playerId)
             identifier,
             defaultGroup,
             json.encode(Config.DefaultSpawnCoords),
-            json.encode(accounts),
+            json.encode(Config.DefaultAccounts),
             json.encode(banking)
         },
         function()
+            print(('[^2INFO^0] Player ^5%s^0 has been created in the database.'):format(playerId))
             loadSystemPlayer(identifier, playerId, true)
         end
     )
@@ -119,35 +110,8 @@ function loadSystemPlayer(identifier, playerId, isNew)
         job = {},
     }
 
-    local job, grade = result.job, tostring(result.job_grade)
-
-    -- Accounts
-    if result.accounts and result.accounts ~= '' then
-        userData.accounts = json.decode(result.accounts)
-    else
-        for name, account in pairs(Config.Accounts) do
-            if not userData.accounts[name] then
-                userData.accounts[name] = {
-                    label = account.label,
-                    balance = Config.StartingAccountMoney[name] or 0
-                }
-            end
-        end
-    end
-
-    -- Banking
-    if result.banking and result.banking ~= '' then
-        userData.banking = json.decode(result.banking)
-    else
-        userData.banking = {
-            cardNumber = System.GetRandomCardNumber(),
-            cardExpiration = System.GetRandomCardExpiration(),
-            cardPincode = nil,
-            transactionHistory = {}
-        }
-    end
-
     -- Job
+    local job, grade = result.job, tostring(result.job_grade)
     jobObject, gradeObject = System.Jobs[job], System.Jobs[job].grades[grade]
 
     userData.job = {
@@ -159,50 +123,34 @@ function loadSystemPlayer(identifier, playerId, isNew)
         skinFemale = gradeObject.skinFemale
     }
 
-    -- Inventory
-    if result.inventory and result.inventory ~= '' then
-        userData.inventory = json.decode(result.inventory)
-    else
-        for name, item in pairs(System.Items) do
-            if item.count > 0 then
-                userData.carryWeight = userData.carryWeight + (item.weight * item.count)
-            end
+    userData.banking = json.decode(result.banking) or {
+        cardNumber = System.GetRandomCardNumber(),
+        cardExpiration = System.GetRandomCardExpiration(),
+        cardPincode = nil,
+        transactionHistory = {}
+    }
 
-            userData.inventory[name] = item
-        end
+    local transactionHistory = MySQL.prepare.await(
+        'SELECT * FROM banking WHERE user = ?',
+        { identifier }
+    )
+
+    if transactionHistory then
+        userData.banking.transactionHistory = transactionHistory
     end
 
-    -- Vehicles
-    if result.vehicles and result.vehicles ~= '' then
-        userData.vehicles = json.decode(result.vehicles)
-    else
-        userData.vehicles = {}
-    end
-
-    -- Properties
-    if result.properties and result.properties ~= '' then
-        userData.properties = json.decode(result.properties)
-    else
-        userData.properties = {}
-    end
-
-    -- Group
+    userData.accounts = json.decode(result.accounts) or Config.DefaultAccounts
+    userData.inventory = json.decode(result.inventory) or Config.DefaultInventory
+    userData.position = json.decode(result.position) or Config.DefaultSpawnCoords
+    userData.properties = json.decode(result.properties) or {}
+    userData.vehicles = json.decode(result.vehicles) or {}
+    userData.loadout = json.decode(result.loadout) or {}
     userData.group = result.group or 'User'
 
     -- Identity
     if result.identity and result.identity ~= '' then
         userData.identity = json.decode(result.identity)
         userData.name = ('%s %s'):format(userData.identity.firstName, userData.identity.lastName)
-    end
-
-    -- Position
-    userData.position = json.decode(result.position) or Config.DefaultSpawnCoords
-
-    -- Loadout
-    if result.loadout and result.loadout ~= '' then
-        userData.loadout = json.decode(result.loadout)
-    else
-        userData.loadout = {}
     end
 
     local xPlayer = CreatePlayer(
@@ -223,7 +171,7 @@ function loadSystemPlayer(identifier, playerId, isNew)
     )
 
     System.Players[playerId] = xPlayer
-    System.playersByIdentifier[identifier] = xPlayer
+    System.PlayersByIdentifier[identifier] = xPlayer
 
     if result.identity and result.identity ~= '' then
         TriggerEvent('system:playerLoaded', playerId, xPlayer, isNew)
@@ -349,12 +297,12 @@ AddEventHandler('playerDropped', function(reason)
         TriggerEvent('system:playerDropped', playerId, reason)
         TriggerClientEvent('system:playerDropped', playerId, reason)
 
-        System.playersByIdentifier[xPlayer.identifier] = nil
+        System.PlayersByIdentifier[xPlayer.identifier] = nil
         System.SavePlayer(xPlayer, function()
             System.Players[playerId] = nil
         end)
 
-        print(('[^2INFO^0] Player ^5"%s"^0 has left the server with id ^5%s^7.'):format(xPlayer.name, playerId)
+        print(('[^2INFO^0] Player ^5"%s"^0 has left the server with id ^5%s^7.'):format(xPlayer.name, playerId))
 
         if Player(playerId).state.activeVehicleNet then
             local vehicle = NetworkGetEntityFromNetworkId(Player(playerId).state.activeVehicleNet)

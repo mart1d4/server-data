@@ -15,10 +15,10 @@ end
 ---@param channel number the channel to add a check to
 ---@param cb function the function to execute the check on
 function addChannelCheck(channel, cb)
-	local channelType = type(channel)
+	local TChannel = type(channel)
 	local cbType = type(cb)
-	if channelType ~= "number" then
-		error(("'channel' expected 'number' got '%s'"):format(channelType))
+	if TChannel ~= "number" then
+		error(("'channel' expected 'number' got '%s'"):format(TChannel))
 	end
 	if cbType ~= 'table' or not cb.__cfx_functionReference then
 		error(("'cb' expected 'function' got '%s'"):format(cbType))
@@ -26,6 +26,7 @@ function addChannelCheck(channel, cb)
 	radioChecks[channel] = cb
 	logger.info("%s added a check to channel %s", GetInvokingResource(), channel)
 end
+
 exports('addChannelCheck', addChannelCheck)
 
 local function radioNameGetter_orig(source)
@@ -43,6 +44,7 @@ function overrideRadioNameGetter(channel, cb)
 	radioNameGetter = cb
 	logger.info("%s added a check to channel %s", GetInvokingResource(), channel)
 end
+
 exports('overrideRadioNameGetter', overrideRadioNameGetter)
 
 --- adds a player to the specified radion channel
@@ -65,7 +67,8 @@ function addPlayerToRadio(source, radioChannel)
 	voiceData[source] = voiceData[source] or defaultTable(source)
 	voiceData[source].radio = radioChannel
 	radioData[radioChannel][source] = false
-	TriggerClientEvent('pma-voice:syncRadioData', source, radioData[radioChannel], GetConvarInt("voice_syncPlayerNames", 0) == 1 and plyName)
+	TriggerClientEvent('pma-voice:syncRadioData', source, radioData[radioChannel],
+		GetConvarInt("voice_syncPlayerNames", 0) == 1 and plyName)
 end
 
 --- removes a player from the specified channel
@@ -95,9 +98,10 @@ function setPlayerRadio(source, _radioChannel)
 	if not radioChannel then
 		-- only full error if its sent from another server-side resource
 		if isResource then
-			error(("'radioChannel' expected 'number', got: %s"):format(type(_radioChannel))) 
+			error(("'radioChannel' expected 'number', got: %s"):format(type(_radioChannel)))
 		else
-			return logger.warn("%s sent a invalid radio, 'radioChannel' expected 'number', got: %s", source,type(_radioChannel))
+			return logger.warn("%s sent a invalid radio, 'radioChannel' expected 'number', got: %s", source,
+				type(_radioChannel))
 		end
 	end
 	if isResource then
@@ -115,6 +119,7 @@ function setPlayerRadio(source, _radioChannel)
 		addPlayerToRadio(source, radioChannel)
 	end
 end
+
 exports('setPlayerRadio', setPlayerRadio)
 
 RegisterNetEvent('pma-voice:setPlayerRadio', function(radioChannel)
@@ -130,15 +135,17 @@ function setTalkingOnRadio(talking)
 	local radioTbl = radioData[plyVoice.radio]
 	if radioTbl then
 		radioTbl[source] = talking
-		logger.verbose('[radio] Set %s to talking: %s on radio %s',source, talking, plyVoice.radio)
+		logger.verbose('[radio] Set %s to talking: %s on radio %s', source, talking, plyVoice.radio)
 		for player, _ in pairs(radioTbl) do
 			if player ~= source then
 				TriggerClientEvent('pma-voice:setTalkingOnRadio', player, source, talking)
-				logger.verbose('[radio] Sync %s to let them know %s is %s',player, source, talking and 'talking' or 'not talking')
+				logger.verbose('[radio] Sync %s to let them know %s is %s', player, source,
+					talking and 'talking' or 'not talking')
 			end
 		end
 	end
 end
+
 RegisterNetEvent('pma-voice:setTalkingOnRadio', setTalkingOnRadio)
 
 AddEventHandler("onResourceStop", function(resource)
@@ -147,7 +154,8 @@ AddEventHandler("onResourceStop", function(resource)
 		local functionResource = string.match(functionRef, resource)
 		if functionResource then
 			radioChecks[channel] = nil
-			logger.warn('Channel %s had its radio check removed because the resource that gave the checks stopped', channel)
+			logger.warn('Channel %s had its radio check removed because the resource that gave the checks stopped',
+				channel)
 		end
 	end
 
@@ -157,9 +165,9 @@ AddEventHandler("onResourceStop", function(resource)
 			local isResource = string.match(functionRef, resource)
 			if isResource then
 				radioNameGetter = radioNameGetter_orig
-				logger.warn('Radio name getter is resetting to default because the resource that gave the cb got turned off')
+				logger.warn(
+				'Radio name getter is resetting to default because the resource that gave the cb got turned off')
 			end
 		end
 	end
-
 end)

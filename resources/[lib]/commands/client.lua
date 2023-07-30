@@ -45,6 +45,23 @@ RegisterCommand('spawn', function(source, args)
     SetEntityAsNoLongerNeeded(vehicle)
 end, false)
 
-RegisterCommand('clearchat', function(source, args)
-    TriggerEvent('chat:clear')
+RegisterCommand('ped', function(source, args)
+    local pedName = args[1]
+
+    if pedName == nil then
+        print('You must specify a ped name')
+        return
+    end
+
+    if not IsModelInCdimage(pedName) or not IsModelAHuman(pedName) then
+        print('Invalid ped name')
+    end
+
+    RequestModel(pedName)
+    while not HasModelLoaded(pedName) do
+        Wait(0)
+    end
+
+    SetPlayerModel(PlayerId(), pedName)
+    SetModelAsNoLongerNeeded(pedName)
 end, false)

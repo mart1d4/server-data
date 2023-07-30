@@ -16,11 +16,13 @@ AddEventHandler('system:onPlayerJoined', function()
 	end
 
 	-- Disable Wanted Level
-	ClearPlayerWantedLevel(PlayerId())
-	SetMaxWantedLevel(5)
+	if Config.DisableWantedLevel then
+		ClearPlayerWantedLevel(PlayerId())
+		SetMaxWantedLevel(0)
+	end
 
-	-- Enable/Disable PVP
-	if Config.EnablePVP then
+	-- Disable PVP
+	if Config.DisablePVP then
 		SetCanAttackFriendly(System.PlayerData.ped, true, false)
 		NetworkSetFriendlyFireOption(true)
 	end
@@ -32,19 +34,15 @@ AddEventHandler('system:onPlayerJoined', function()
 		end
 	end
 
-	-- Disable Weapon Pickups
-	local weaponPickups = { `PICKUP_WEAPON_CARBINERIFLE`, `PICKUP_WEAPON_PISTOL`, `PICKUP_WEAPON_PUMPSHOTGUN` }
-	for i = 1, #weaponPickups do
-		ToggleUsePickupsForPlayer(PlayerId(), weaponPickups[i], false)
-	end
-
 	-- Disable Seat Shuffling
-	AddEventHandler('system:enteredVehicle', function(vehicle, plate, seat)
-		if seat == 0 then
-			SetPedIntoVehicle(System.PlayerData.ped, vehicle, 0)
-			SetPedConfigFlag(System.PlayerData.ped, 184, true)
-		end
-	end)
+	if Config.DisableSeatShuffle then
+		AddEventHandler('system:enteredVehicle', function(vehicle, plate, seat)
+			if seat == 0 then
+				SetPedIntoVehicle(System.PlayerData.ped, vehicle, 0)
+				SetPedConfigFlag(System.PlayerData.ped, 184, true)
+			end
+		end)
+	end
 
 	CreateThread(function()
 		while true do
@@ -113,8 +111,10 @@ AddEventHandler('system:onPlayerJoined', function()
 	end)
 
 	-- Disable Dispatch Services
-	for i = 1, 15 do
-		EnableDispatchService(i, false)
+	if Config.DisableDispatch then
+		for i = 1, 15 do
+			EnableDispatchService(i, false)
+		end
 	end
 
 	SetDefaultVehicleNumberPlateTextPattern(-1, Config.CustomPlates)

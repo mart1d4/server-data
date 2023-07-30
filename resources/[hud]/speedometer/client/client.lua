@@ -143,7 +143,7 @@ AddEventHandler('speedometer:enteredVehicle', function(currentVehicle, currentPl
     inVehicle = true
     vehicleType = vehicleClass == 15 or vehicleClass == 16 and 'AIR' or 'LAND'
 
-    driverCheckThread(currentVehicle)
+    driverCheckThread()
     activateVehicleHud(currentVehicle)
 end)
 
