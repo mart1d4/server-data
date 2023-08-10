@@ -17,7 +17,7 @@
     },
     "profanityFilter": {
         "enabled": false,
-        "badWords": ["esx"]
+        "badWords": []
     },
     "database": {
         "useIdentifierPrefix": false,
@@ -34,9 +34,9 @@
     },
     "defaultContacts": [],
     "disabledApps": [],
-    "apps": ["pefcl"],
+    "apps": [],
     "voiceMessage": {
-        "enabled": false,
+        "enabled": true,
         "authorizationHeader": "PE-Secret",
         "url": "",
         "returnedDataIndexes": ["url"]

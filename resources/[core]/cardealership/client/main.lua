@@ -5,13 +5,15 @@ local tooltipType = 'default'
 local lastZone
 local currentDisplayVehicle = {}
 local vehicleStock = {}
-local chosenVehicle = {
-	name = 'BMW M5 F10',
-	model = 'm5f10',
-	price = 100000,
-	carryWeight = 20,
-	stock = 10,
-}
+local chosenVehicle = {}
+
+AddEventHandler('onResourceStart', function(resourceName)
+	if (GetCurrentResourceName() ~= resourceName) then
+		return
+	end
+
+	TriggerServerEvent("cardealership:fetchVehicles")
+end)
 
 RegisterNetEvent('system:playerLoaded', function()
 	TriggerServerEvent("cardealership:fetchVehicles")
@@ -19,6 +21,7 @@ end)
 
 RegisterNetEvent('cardealership:updateVehicles', function(vehicles)
 	vehicleStock = vehicles
+	chosenVehicle = vehicles[1]
 end)
 
 -- Create Car Dealership Blip
@@ -36,12 +39,12 @@ CreateThread(function()
 end)
 
 function LoadVehicle(index, netId)
-    CreateThread(function()
-        while not NetworkDoesEntityExistWithNetworkId(netId) do
-            Wait(200)
+	CreateThread(function()
+		while not NetworkDoesEntityExistWithNetworkId(netId) do
+			Wait(200)
 		end
 
-        local vehicle = NetworkGetEntityFromNetworkId(netId)
+		local vehicle = NetworkGetEntityFromNetworkId(netId)
 
 		if index == 4 then
 			currentDisplayVehicle = {
@@ -59,13 +62,13 @@ function LoadVehicle(index, netId)
 		FreezeEntityPosition(vehicle, true)
 		SetNetworkIdCanMigrate(netId, true)
 		NetworkRegisterEntityAsNetworked(vehicle)
-    end)
+	end)
 end
 
 RegisterNetEvent('cardealership:spawnVehicles', function(netIdTable)
-    for i = 1, #netIdTable do
-        LoadVehicle(i, netIdTable[i])
-    end
+	for i = 1, #netIdTable do
+		LoadVehicle(i, netIdTable[i])
+	end
 end)
 
 -- Draw Markers & Marker Actions
@@ -132,25 +135,25 @@ CreateThread(function()
 end)
 
 function ShowTooltip(show, tooltip, key, menuType)
-    isTooltipActive = show
+	isTooltipActive = show
 
-    CreateThread(function()
-        while isTooltipActive and not inMenu do
-            SetTextComponentFormat("STRING")
-            AddTextComponentString(tooltip)
-            DisplayHelpTextFromStringLabel(0, 0, 1, -1)
+	CreateThread(function()
+		while isTooltipActive and not inMenu do
+			SetTextComponentFormat("STRING")
+			AddTextComponentString(tooltip)
+			DisplayHelpTextFromStringLabel(0, 0, 1, -1)
 
-            if IsControlJustReleased(0, key) then
-                if inMenu then
-                    ShowMenu(false)
-                else
-                    ShowMenu(true, menuType)
-                end
-            end
+			if IsControlJustReleased(0, key) then
+				if inMenu then
+					ShowMenu(false)
+				else
+					ShowMenu(true, menuType)
+				end
+			end
 
-            Wait(0)
-        end
-    end)
+			Wait(0)
+		end
+	end)
 end
 
 function ShowMenu(show, menuType)
@@ -171,8 +174,8 @@ function ShowMenu(show, menuType)
 				vehicles = vehicleStock,
 				vehicle = chosenVehicle,
 				isOwned = isOwned,
-				cash = System.GetPlayerData().accounts.cash.balance,
-				bank = System.GetPlayerData().accounts.bank.balance,
+				cash = System.GetPlayerData().accounts.Cash,
+				bank = System.GetPlayerData().accounts.Bank,
 			})
 		})
 		SetNuiFocus(true, true)
@@ -258,13 +261,15 @@ RegisterNetEvent('cardealership:spawnNetVehicle', function(netId, vehicle)
 end)
 
 RegisterNUICallback('BuyVehicle', function(data)
+	data.vehicle.price = tonumber(data.vehicle.price)
+
 	if data.type == 'cash' then
-		if System.GetPlayerData().accounts.cash.balance >= data.vehicle.price then
-			TriggerServerEvent('cardealership:buyVehicle', data.vehicle, data.color, 'cash')
+		if System.GetPlayerData().accounts.Cash >= data.vehicle.price then
+			TriggerServerEvent('cardealership:buyVehicle', data.vehicle, data.color, 'Cash')
 		end
 	elseif data.type == 'bank' then
-		if System.GetPlayerData().accounts.bank.balance >= data.vehicle.price then
-			TriggerServerEvent('cardealership:buyVehicle', data.vehicle, data.color, 'bank')
+		if System.GetPlayerData().accounts.Bank >= data.vehicle.price then
+			TriggerServerEvent('cardealership:buyVehicle', data.vehicle, data.color, 'Bank')
 		end
 	end
 end)

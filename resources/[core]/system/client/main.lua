@@ -166,7 +166,7 @@ RegisterNetEvent('system:playerLoaded', function(playerId, xPlayer, isNew)
 		y = System.PlayerData.position.y,
 		z = System.PlayerData.position.z + 0.05,
 		heading = System.PlayerData.position.heading,
-		model = 'a_f_m_beach_01',
+		model = 'messi',
 		skipFade = false
 	}, function()
 		TriggerServerEvent('system:onPlayerSpawn')

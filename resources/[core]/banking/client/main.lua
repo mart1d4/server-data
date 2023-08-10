@@ -3,7 +3,19 @@ local isMenuActive = false
 local isTooltipActive = false
 local activeBlips, bankPoints, atmPoints, markerPoints = {}, {}, {}, {}
 
+AddEventHandler('onResourceStart', function(resourceName)
+    if (GetCurrentResourceName() ~= resourceName) then
+        return
+    end
+
+    Initialize()
+end)
+
 RegisterNetEvent('system:playerLoaded', function()
+    Initialize()
+end)
+
+function Initialize()
     CreateBlips()
 
     local data = {
@@ -13,7 +25,7 @@ RegisterNetEvent('system:playerLoaded', function()
 
     playerLoaded = true
 
-    CreateThread(function ()
+    CreateThread(function()
         while playerLoaded do
             data.ped = PlayerPedId()
             data.coord = GetEntityCoords(data.ped)
@@ -21,9 +33,10 @@ RegisterNetEvent('system:playerLoaded', function()
 
             if IsPedOnFoot(data.ped) and not isMenuActive then
                 for i = 1, #Config.AtmModels do
-                    local atm = GetClosestObjectOfType(data.coord.x, data.coord.y, data.coord.z, 0.7, Config.AtmModels[i], false, false, false)
+                    local atm = GetClosestObjectOfType(data.coord.x, data.coord.y, data.coord.z, 0.7, Config.AtmModels
+                        [i], false, false, false)
                     if atm ~= 0 then
-                        atmPoints[#atmPoints+1] = GetEntityCoords(atm)
+                        atmPoints[#atmPoints + 1] = GetEntityCoords(atm)
                     end
                 end
 
@@ -31,11 +44,11 @@ RegisterNetEvent('system:playerLoaded', function()
                     local bankDistance = #(data.coord - Config.Banks[i].Position.xyz)
 
                     if bankDistance <= 0.7 then
-                        bankPoints[#bankPoints+1] = Config.Banks[i].Position.xyz
+                        bankPoints[#bankPoints + 1] = Config.Banks[i].Position.xyz
                     end
 
                     if Config.ShowMarker and bankDistance <= (Config.DrawMarker or 10) then
-                        markerPoints[#markerPoints+1] = Config.Banks[i].Position.xyz
+                        markerPoints[#markerPoints + 1] = Config.Banks[i].Position.xyz
                     end
                 end
             end
@@ -78,7 +91,7 @@ RegisterNetEvent('system:playerLoaded', function()
             Wait(wait)
         end
     end)
-end)
+end
 
 function ShowTooltip(show, atm)
     isTooltipActive = show
@@ -137,38 +150,39 @@ function ShowMenu(show, isATM)
             data = json.encode({ show = false })
         })
         SetNuiFocus(false, false)
-        
+
         return
     end
 
     -- Get player's banking data before opening the menu
-    TriggerServerEvent('banking:getPlayerData')
-    RegisterNetEvent('banking:usePlayerData', function(data)
-        SetTimecycleModifier("hud_def_blur")
-
-        SendNUIMessage({
-            action = 'Banking',
-            data = json.encode({
-                show = true,
-                isATM = isATM,
-                accounts = {
-                    cash = data.cash,
-                    bank = data.bank,
-                },
-                card = {
-                    bankName =  'Bank of Los Santos',
-                    cardNumber = data.cardNumber,
-                    cardExpiration = data.expiration,
-                    cardHolder = data.name,
-                    pincode = data.pincode,
-                },
-                transactionsData = data.transactionHistory
-            })
-        })
-
-        SetNuiFocus(true, true)
-    end)
+    TriggerServerEvent('banking:showBanking', isATM)
 end
+
+RegisterNetEvent('banking:showBanking', function(data, isATM)
+    SetTimecycleModifier("hud_def_blur")
+
+    SendNUIMessage({
+        action = 'Banking',
+        data = json.encode({
+            show = true,
+            isATM = isATM,
+            accounts = {
+                cash = data.cash,
+                bank = data.bank,
+            },
+            card = {
+                bankName = 'Bank of Los Santos',
+                cardHolder = data.name,
+                cardNumber = data.cardNumber,
+                cardExpiration = data.expiration,
+                pincode = data.pincode,
+            },
+            transactionsData = data.transactionHistory
+        })
+    })
+
+    SetNuiFocus(true, true)
+end)
 
 RegisterNUICallback('CloseMenu', function()
     ShowMenu(false)
@@ -223,7 +237,7 @@ RegisterNetEvent('banking:updateData', function(data)
                 bank = data.bank,
             },
             card = {
-                bankName =  'Bank of Los Santos',
+                bankName = 'Bank of Los Santos',
                 cardNumber = data.cardNumber,
                 cardExpiration = data.expiration,
                 cardHolder = data.name,

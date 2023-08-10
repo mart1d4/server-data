@@ -90,7 +90,7 @@ function CreatePlayer(
 	end
 
 	-- Accounts
-	function getTotalMoney()
+	function self.getTotalMoney()
 		local total = 0
 
 		for _, v in pairs(self.accounts) do
@@ -100,7 +100,7 @@ function CreatePlayer(
 		return total
 	end
 
-	function getAccountMoney(account)
+	function self.getAccountMoney(account)
 		for k, v in pairs(self.accounts) do
 			if k == account then
 				return v
@@ -110,7 +110,7 @@ function CreatePlayer(
 		return nil
 	end
 
-	function setAccountMoney(account, amount)
+	function self.setAccountMoney(account, amount)
 		if not tonumber(amount) then
 			print('[Player:SetAccountMoney] Invalid Money Type')
 			return nil
@@ -128,13 +128,13 @@ function CreatePlayer(
 		return nil
 	end
 
-	function addAccountMoney(account, amount)
+	function self.addAccountMoney(account, amount)
 		if not tonumber(amount) then
 			print('[Player:AddAccountMoney] Invalid Money Type')
 			return nil
 		end
 
-		if getAccountMoney(account) ~= nil and amount > 0 then
+		if self.getAccountMoney(account) ~= nil and amount > 0 then
 			accounts[account] = accounts[account] + System.Math.Round(amount)
 
 			self.triggerEvent('system:playerUpdated', 'accounts', self.accounts)
@@ -146,13 +146,13 @@ function CreatePlayer(
 		return nil
 	end
 
-	function removeAccountMoney(account, amount)
+	function self.removeAccountMoney(account, amount)
 		if not tonumber(amount) then
 			print('[Player:RemoveAccountMoney] Invalid Money Type')
 			return nil
 		end
 
-		if getAccountMoney(account) ~= nil and amount > 0 then
+		if self.getAccountMoney(account) ~= nil and amount > 0 then
 			if accounts[account] - amount >= 0 then
 				accounts[account] = accounts[account] - System.Math.Round(amount)
 
@@ -167,8 +167,13 @@ function CreatePlayer(
 	end
 
 	-- Banking
-	function self.addBankingTransaction(transaction)
-		table.insert(self.banking.transactionHistory, transaction)
+	function self.setBanking(field, value)
+		for k in pairs(self.banking) do
+			if k == field then
+				self.banking[k] = value
+				break
+			end
+		end
 
 		self.triggerEvent('system:playerUpdated', 'banking', self.banking)
 		TriggerEvent('system:playerUpdated', self.playerId)
@@ -179,7 +184,7 @@ function CreatePlayer(
 		table.insert(self.vehicles, vehicle)
 
 		if makeActive then
-			for _, v in ipairs(self.vehicles) do
+			for _, v in pairs(self.vehicles) do
 				if v.plate == vehicle.plate then
 					v.state.active = true
 					break
@@ -205,129 +210,12 @@ function CreatePlayer(
 		TriggerEvent('system:playerUpdated', self.playerId)
 	end
 
-	-- Items
-	function getItemPrice(item)
-		return self.inventory[item]["Price"]
+	function self.setVehicles(vehicles)
+		self.vehicles = vehicles
+
+		self.triggerEvent('system:playerUpdated', 'vehicles', self.vehicles)
+		TriggerEvent('system:playerUpdated', self.playerId)
 	end
-
-	function getItemAmount(item)
-		return self.inventory[item]["Amount"]
-	end
-
-	function getItemWeight(item)
-		return self.inventory[item]["Weight"]
-	end
-
-	function getItemDescription(item)
-		return self.inventory[item]["Description"]
-	end
-
-	function getItemsWeight()
-		local total = 0
-
-		for _, v in pairs(self.inventory) do
-			total = total + v["Weight"]
-		end
-
-		return total
-	end
-
-	function getItemsPrice()
-		local total = 0
-
-		for _, v in pairs(self.inventory) do
-			total = total + v["Price"]
-		end
-
-		return total
-	end
-
-	function getItemsCount()
-		local total = 0
-
-		for _, v in pairs(self.inventory) do
-			total = total + v["Amount"]
-		end
-
-		return total
-	end
-
-	function addItem(item, amount)
-		if self.inventory[item] ~= nil then
-			if getItemsWeight() + amount <= self.carryWeight then
-				self.inventory[item]["Amount"] = self.inventory[item]["Amount"] + amount
-
-				self.triggerEvent('system:playerUpdated', 'inventory', self.inventory)
-				TriggerEvent('system:playerUpdated', self.playerId)
-
-				return self.inventory[item]["Amount"]
-			end
-		end
-
-		return nil
-	end
-
-	function removeItem(item, amount)
-		if self.inventory[item] ~= nil then
-			if self.inventory[item]["Amount"] - amount >= 0 then
-				self.inventory[item]["Amount"] = self.inventory[item]["Amount"] - amount
-
-				self.triggerEvent('system:playerUpdated', 'inventory', self.inventory)
-				TriggerEvent('system:playerUpdated', self.playerId)
-
-				return self.inventory[item]["Amount"]
-			end
-		end
-
-		return nil
-	end
-
-	-- Weight
-	function self.setMaxWeight(newWeight)
-		if not tonumber(newWeight) then
-			print('[Player:SetMaxWeight] Invalid Weight Type')
-			return nil
-		end
-
-		if newWeight > 0 then
-			self.maxWeight = newWeight
-			self.triggerEvent('system:playerUpdated', 'maxWeight', self.maxWeight)
-			TriggerEvent('system:playerUpdated', self.playerId)
-
-			return self.maxWeight
-		end
-	end
-
-	-- Jobs
-	function self.setJob(jobName, grade)
-		grade = tostring(grade)
-
-		if System.Jobs[jobName] ~= nil then
-			local jobObject, gradeObject = System.Jobs[jobName], System.Jobs[jobName].grades[grade]
-
-			self.job = {
-				name = jobObject.name,
-				grade = tonumber(grade),
-				gradeName = gradeObject.name,
-				salary = gradeObject.salary,
-			}
-
-			self.job.skinMale = json.decode(gradeObject.skinMale) or {}
-			self.job.skinFemale = json.decode(gradeObject.skinFemale) or {}
-
-			self.triggerEvent('system:playerUpdated', 'job', self.job)
-			TriggerEvent('system:playerUpdated', self.playerId)
-
-			Player(self.playerId).state:set('job', self.job, true)
-		else
-			print('Invalid Job Name or Grade')
-		end
-	end
-
-	-- Weapons
-	--
-	--
-	--
 
 	return self
 end

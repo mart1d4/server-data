@@ -27,28 +27,28 @@ AddEventHandler('system:playerLoaded', function(playerId)
     TriggerClientEvent('banking:spawnPeds', playerId, netIdTable)
 end)
 
-RegisterServerEvent("banking:getPlayerData", function()
+RegisterServerEvent("banking:showBanking", function(isATM)
     local xPlayer = System.GetPlayerFromId(source)
 
     playerData = {
         name = xPlayer.name,
-        cash = xPlayer.getAccount('cash'),
-        bank = xPlayer.getAccount('bank'),
+        cash = xPlayer.getAccountMoney('Cash'),
+        bank = xPlayer.getAccountMoney('Bank'),
         cardNumber = xPlayer.banking.cardNumber,
         expiration = xPlayer.banking.cardExpiration,
         pincode = xPlayer.banking.cardPincode,
         transactionHistory = xPlayer.banking.transactionHistory,
     }
 
-    TriggerClientEvent('banking:usePlayerData', source, playerData)
+    TriggerClientEvent('banking:showBanking', source, playerData, isATM)
 end)
 
 RegisterServerEvent("banking:withdraw", function(amount, message)
     local xPlayer = System.GetPlayerFromId(source)
 
-    if xPlayer.getAccount('bank').balance >= amount then
-        xPlayer.removeAccountMoney('bank', amount)
-        xPlayer.addAccountMoney('cash', amount)
+    if xPlayer.getAccountMoney('Bank') >= amount then
+        xPlayer.removeAccountMoney('Bank', amount)
+        xPlayer.addAccountMoney('Cash', amount)
         xPlayer.setBanking('transactionHistory', {
             type = 'withdraw',
             amount = amount,
@@ -56,10 +56,11 @@ RegisterServerEvent("banking:withdraw", function(amount, message)
             time = os.time() * 1000,
         }, true)
 
-        playerData.cash = xPlayer.getAccount('cash')
-        playerData.bank = xPlayer.getAccount('bank')
+        playerData.cash = xPlayer.getAccountMoney('Cash')
+        playerData.bank = xPlayer.getAccountMoney('Bank')
         playerData.transactionHistory = xPlayer.banking.transactionHistory
 
+        TriggerClientEvent('banking:updateData', source, playerData)
         TriggerClientEvent('banking:sendValidation', source, {
             type = 'withdraw',
             message = 'Successfully withdrew $' .. amount .. ' from your bank account.',
@@ -75,9 +76,9 @@ end)
 RegisterServerEvent("banking:deposit", function(amount, message)
     local xPlayer = System.GetPlayerFromId(source)
 
-    if xPlayer.getAccount('cash').balance >= amount then
-        xPlayer.removeAccountMoney('cash', amount)
-        xPlayer.addAccountMoney('bank', amount)
+    if xPlayer.getAccountMoney('Cash') >= amount then
+        xPlayer.removeAccountMoney('Cash', amount)
+        xPlayer.addAccountMoney('Bank', amount)
         xPlayer.setBanking('transactionHistory', {
             type = 'deposit',
             amount = amount,
@@ -85,8 +86,8 @@ RegisterServerEvent("banking:deposit", function(amount, message)
             time = os.time() * 1000,
         }, true)
 
-        playerData.cash = xPlayer.getAccount('cash')
-        playerData.bank = xPlayer.getAccount('bank')
+        playerData.cash = xPlayer.getAccountMoney('Cash')
+        playerData.bank = xPlayer.getAccountMoney('Bank')
         playerData.transactionHistory = xPlayer.banking.transactionHistory
 
         TriggerClientEvent('banking:updateData', source, playerData)
@@ -105,22 +106,22 @@ end)
 RegisterServerEvent("banking:transfer", function(amount, playerId, message)
     local xPlayer = System.GetPlayerFromId(source)
 
-    if xPlayer.getAccount('bank').balance >= amount and xPlayer.identifier ~= playerId then
+    if xPlayer.getAccountMoney('Bank') >= amount and xPlayer.identifier ~= playerId then
         local targetPlayer = System.GetPlayerFromIdentifier(playerId)
 
         if targetPlayer then
-            xPlayer.removeAccountMoney('bank', amount)
-            targetPlayer.addAccountMoney('bank', amount)
+            xPlayer.removeAccountMoney('Bank', amount)
+            targetPlayer.addAccountMoney('Bank', amount)
             xPlayer.setBanking('transactionHistory', {
                 type = 'transfer',
                 amount = amount,
                 message = message or '',
                 time = os.time() * 1000,
                 target = targetPlayer.name,
-            }, true)
+            })
 
-            playerData.cash = xPlayer.getAccount('cash')
-            playerData.bank = xPlayer.getAccount('bank')
+            playerData.cash = xPlayer.getAccountMoney('Cash')
+            playerData.bank = xPlayer.getAccountMoney('Bank')
             playerData.transactionHistory = xPlayer.banking.transactionHistory
 
             TriggerClientEvent('banking:updateData', source, playerData)

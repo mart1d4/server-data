@@ -126,7 +126,7 @@ function loadSystemPlayer(identifier, playerId, isNew)
     userData.banking = json.decode(result.banking) or {
         cardNumber = System.GetRandomCardNumber(),
         cardExpiration = System.GetRandomCardExpiration(),
-        cardPincode = nil,
+        cardPincode = 0,
         transactionHistory = {}
     }
 

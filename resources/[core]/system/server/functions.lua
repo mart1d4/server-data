@@ -65,7 +65,7 @@ function System.SavePlayers(cb)
 
             print(('[^2INFO^7] Saved ^5%s^7 %s over ^5%s^7 ms'):format(
                 #parameters,
-                'player' + #parameters > 1 and 's',
+                #parameters > 1 and 'players' or 'player',
                 System.Math.Round((os.time() - startTime) / 1000000, 2)
             ))
         end

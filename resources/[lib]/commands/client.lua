@@ -53,7 +53,7 @@ RegisterCommand('ped', function(source, args)
         return
     end
 
-    if not IsModelInCdimage(pedName) or not IsModelAHuman(pedName) then
+    if not IsModelInCdimage(pedName) then
         print('Invalid ped name')
     end
 

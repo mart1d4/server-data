@@ -79,12 +79,7 @@ CREATE TABLE IF NOT EXISTS owned_vehicles (
 	`plate` VARCHAR(8) NOT NULL PRIMARY KEY,
 	`vehicle` INT2 NOT NULL,
     `mileage` DECIMAL UNSIGNED NOT NULL DEFAULT 0.0,
-    `props` LONGTEXT NOT NULL DEFAULT '',
-    `mods` LONGTEXT NOT NULL DEFAULT '',
     `owner` VARCHAR(40) NOT NULL,
-    `position` LONGTEXT NOT NULL DEFAULT '',
-    `state` LONGTEXT NOT NULL DEFAULT '',
-    `trunk_inventory` LONGTEXT NOT NULL DEFAULT '',
     `purchased` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
     `updated` TIMESTAMP NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
 

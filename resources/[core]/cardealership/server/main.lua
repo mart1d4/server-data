@@ -113,7 +113,9 @@ RegisterServerEvent('cardealership:buyVehicle', function(vehicle, color, type)
 
     local vehicleData = {
         plate = plate,
+        vehicle = vehicle.id,
         name = vehicle.name,
+        brand = vehicle.brand,
         model = vehicle.model,
         sellPrice = vehicle.price,
         mods = vehicle.mods or {},
@@ -140,23 +142,14 @@ RegisterServerEvent('cardealership:buyVehicle', function(vehicle, color, type)
         updated = os.time()
     }
 
-    MySQL.query('INSERT INTO owned_vehicles (plate, name, model, sellPrice, mods, inventory, props, mileage, owner, garage, position, heading, state, purchased, updated) VALUES (@plate, @name, @model, @sellPrice, @mods, @inventory, @props, @mileage, @owner, @garage, @position, @heading, @state, @purchased, @updated)', {
-        ['@plate'] = vehicleData.plate,
-        ['@name'] = vehicleData.name,
-        ['@model'] = vehicleData.model,
-        ['@sellPrice'] = vehicleData.sellPrice,
-        ['@mods'] = json.encode(vehicleData.mods),
-        ['@inventory'] = json.encode(vehicleData.inventory),
-        ['@props'] = json.encode(vehicleData.props),
-        ['@mileage'] = vehicleData.mileage,
-        ['@owner'] = vehicleData.owner,
-        ['@garage'] = vehicleData.garage,
-        ['@position'] = json.encode(vehicleData.position),
-        ['@heading'] = vehicleData.heading,
-        ['@state'] = json.encode(vehicleData.state),
-        ['@purchased'] = vehicleData.purchased,
-        ['@updated'] = vehicleData.updated
-    })
+    MySQL.query(
+        'INSERT INTO owned_vehicles (plate, vehicle, mileage, owner) VALUES (@plate, @vehicle, @mileage, @owner)',
+        {
+            ['@plate'] = vehicleData.plate,
+            ['@vehicle'] = vehicleData.vehicle,
+            ['@mileage'] = vehicleData.mileage,
+            ['@owner'] = vehicleData.owner,
+        })
 
     xPlayer.addVehicle(vehicleData, true)
     xPlayer.removeAccountMoney(type, vehicle.price)
@@ -168,7 +161,7 @@ RegisterServerEvent('cardealership:sellVehicle', function(vehicle, price)
     local xPlayer = System.GetPlayerFromId(playerId)
 
     xPlayer.removeVehicle(vehicle.plate)
-    xPlayer.addAccountMoney('bank', price)
+    xPlayer.addAccountMoney('Bank', price)
 
     MySQL.query('DELETE FROM owned_vehicles WHERE plate = ?', {
         vehicle.plate

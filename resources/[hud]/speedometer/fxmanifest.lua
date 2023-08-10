@@ -13,6 +13,8 @@ shared_script '@system/imports.lua'
 client_script 'client/**/*'
 server_script 'server/**/*'
 
-files 'web/dist/**/*'
+files {
+    'web/dist/**/*',
+}
 
 dependency 'system'
