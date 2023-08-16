@@ -21,7 +21,7 @@ end)
 
 RegisterNetEvent('cardealership:updateVehicles', function(vehicles)
 	vehicleStock = vehicles
-	chosenVehicle = vehicles[1]
+	chosenVehicle = vehicles[30]
 end)
 
 -- Create Car Dealership Blip

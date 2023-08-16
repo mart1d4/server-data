@@ -32,7 +32,7 @@ local function StartPayCheck()
                 local job = xPlayer.job.name
                 local salary = xPlayer.job.salary
 
-                if job == nil or salary == nil then
+                if job == nil or salary == nil or type(salary) ~= 'number' then
                     job = 'Unemployed'
                     salary = 600
                 end

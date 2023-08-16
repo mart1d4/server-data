@@ -27,7 +27,7 @@ AddEventHandler('system:playerLoaded', function(playerId)
     TriggerClientEvent('banking:spawnPeds', playerId, netIdTable)
 end)
 
-RegisterServerEvent("banking:showBanking", function(isATM)
+RegisterServerEvent("banking:fetchData", function(isATM)
     local xPlayer = System.GetPlayerFromId(source)
 
     playerData = {
@@ -37,28 +37,30 @@ RegisterServerEvent("banking:showBanking", function(isATM)
         cardNumber = xPlayer.banking.cardNumber,
         expiration = xPlayer.banking.cardExpiration,
         pincode = xPlayer.banking.cardPincode,
-        transactionHistory = xPlayer.banking.transactionHistory,
+        transactions = xPlayer.banking.transactionHistory,
     }
 
-    TriggerClientEvent('banking:showBanking', source, playerData, isATM)
+    TriggerClientEvent('banking:fetchData', source, playerData, isATM)
 end)
 
 RegisterServerEvent("banking:withdraw", function(amount, message)
     local xPlayer = System.GetPlayerFromId(source)
 
     if xPlayer.getAccountMoney('Bank') >= amount then
-        xPlayer.removeAccountMoney('Bank', amount)
-        xPlayer.addAccountMoney('Cash', amount)
-        xPlayer.setBanking('transactionHistory', {
+        local transaction = {
             type = 'withdraw',
             amount = amount,
             message = message or '',
             time = os.time() * 1000,
-        }, true)
+        }
 
+        xPlayer.removeAccountMoney('Bank', amount)
+        xPlayer.addAccountMoney('Cash', amount)
+        xPlayer.addBankingTransaction(transaction)
+
+        table.insert(playerData.transactions, transaction)
         playerData.cash = xPlayer.getAccountMoney('Cash')
         playerData.bank = xPlayer.getAccountMoney('Bank')
-        playerData.transactionHistory = xPlayer.banking.transactionHistory
 
         TriggerClientEvent('banking:updateData', source, playerData)
         TriggerClientEvent('banking:sendValidation', source, {
@@ -68,7 +70,7 @@ RegisterServerEvent("banking:withdraw", function(amount, message)
     else
         TriggerClientEvent('banking:sendError', source, {
             type = 'withdraw',
-            message = 'You do not have enough money in your bank account.',
+            message = 'Something went wrong',
         })
     end
 end)
@@ -77,18 +79,20 @@ RegisterServerEvent("banking:deposit", function(amount, message)
     local xPlayer = System.GetPlayerFromId(source)
 
     if xPlayer.getAccountMoney('Cash') >= amount then
-        xPlayer.removeAccountMoney('Cash', amount)
-        xPlayer.addAccountMoney('Bank', amount)
-        xPlayer.setBanking('transactionHistory', {
+        local transaction = {
             type = 'deposit',
             amount = amount,
             message = message or '',
             time = os.time() * 1000,
-        }, true)
+        }
 
+        xPlayer.removeAccountMoney('Cash', amount)
+        xPlayer.addAccountMoney('Bank', amount)
+        xPlayer.addBankingTransaction(transaction)
+
+        table.insert(playerData.transactions, transaction)
         playerData.cash = xPlayer.getAccountMoney('Cash')
         playerData.bank = xPlayer.getAccountMoney('Bank')
-        playerData.transactionHistory = xPlayer.banking.transactionHistory
 
         TriggerClientEvent('banking:updateData', source, playerData)
         TriggerClientEvent('banking:sendValidation', source, {
@@ -98,7 +102,7 @@ RegisterServerEvent("banking:deposit", function(amount, message)
     else
         TriggerClientEvent('banking:sendError', source, {
             type = 'deposit',
-            message = 'You do not have enough cash in your wallet.',
+            message = 'Something went wrong',
         })
     end
 end)
@@ -110,19 +114,21 @@ RegisterServerEvent("banking:transfer", function(amount, playerId, message)
         local targetPlayer = System.GetPlayerFromIdentifier(playerId)
 
         if targetPlayer then
-            xPlayer.removeAccountMoney('Bank', amount)
-            targetPlayer.addAccountMoney('Bank', amount)
-            xPlayer.setBanking('transactionHistory', {
+            local transaction = {
                 type = 'transfer',
                 amount = amount,
                 message = message or '',
                 time = os.time() * 1000,
                 target = targetPlayer.name,
-            })
+            }
 
+            xPlayer.removeAccountMoney('Bank', amount)
+            targetPlayer.addAccountMoney('Bank', amount)
+            xPlayer.addBankingTransaction(transaction)
+
+            table.insert(playerData.transactions, transaction)
             playerData.cash = xPlayer.getAccountMoney('Cash')
             playerData.bank = xPlayer.getAccountMoney('Bank')
-            playerData.transactionHistory = xPlayer.banking.transactionHistory
 
             TriggerClientEvent('banking:updateData', source, playerData)
             TriggerClientEvent('banking:sendValidation', source, {
@@ -138,7 +144,7 @@ RegisterServerEvent("banking:transfer", function(amount, playerId, message)
     else
         TriggerClientEvent('banking:sendError', source, {
             type = 'transfer',
-            message = 'You do not have enough money in your bank account.',
+            message = 'Something went wrong',
         })
     end
 end)
@@ -151,6 +157,14 @@ RegisterServerEvent("banking:pincode", function(pincode)
         xPlayer.setBanking('cardPincode', pincode)
         playerData.pincode = pincode
 
+        MySQL.update.await(
+            'UPDATE users SET banking = ? WHERE id = ?',
+            {
+                json.encode(xPlayer.banking),
+                xPlayer.identifier
+            }
+        )
+
         TriggerClientEvent('banking:updateData', playerId, playerData)
         xPlayer.triggerEvent(
             'system:notify',
@@ -161,15 +175,6 @@ RegisterServerEvent("banking:pincode", function(pincode)
             'CHAR_BANK_MAZE',
             2
         )
-
-        MySQL.update.await(
-            'UPDATE users SET banking = ? WHERE id = ?',
-            {
-                json.encode(xPlayer.banking),
-                xPlayer.identifier
-            }
-        )
-
         TriggerClientEvent('banking:sendValidation', playerId, {
             type = 'pincode',
             message = 'Successfully changed your pincode to ' .. pincode .. '.',
@@ -177,7 +182,7 @@ RegisterServerEvent("banking:pincode", function(pincode)
     else
         TriggerClientEvent('banking:sendError', playerId, {
             type = 'pincode',
-            message = 'Pincode must be 4 digits long.',
+            message = 'Something went wrong',
         })
     end
 end)

@@ -118,7 +118,7 @@ function loadSystemPlayer(identifier, playerId, isNew)
         name = job,
         grade = gradeObject.grade,
         gradeName = gradeObject.name,
-        salary = gradeObject.salary,
+        salary = tonumber(gradeObject.salary),
         skinMale = gradeObject.skinMale,
         skinFemale = gradeObject.skinFemale
     }
@@ -246,6 +246,8 @@ RegisterNetEvent('system:updateVehicleState', function(plate, netId)
 
                 Wait(300)
             end
+
+            Wait(1000)
         end)
     end
 end)

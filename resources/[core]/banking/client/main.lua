@@ -155,10 +155,10 @@ function ShowMenu(show, isATM)
     end
 
     -- Get player's banking data before opening the menu
-    TriggerServerEvent('banking:showBanking', isATM)
+    TriggerServerEvent('banking:fetchData', isATM)
 end
 
-RegisterNetEvent('banking:showBanking', function(data, isATM)
+RegisterNetEvent('banking:fetchData', function(data, isATM)
     SetTimecycleModifier("hud_def_blur")
 
     SendNUIMessage({
@@ -177,7 +177,7 @@ RegisterNetEvent('banking:showBanking', function(data, isATM)
                 cardExpiration = data.expiration,
                 pincode = data.pincode,
             },
-            transactionsData = data.transactionHistory
+            transactions = data.transactions
         })
     })
 
@@ -243,7 +243,7 @@ RegisterNetEvent('banking:updateData', function(data)
                 cardHolder = data.name,
                 pincode = data.pincode,
             },
-            transactionsData = data.transactionHistory
+            transactions = data.transactions
         })
     })
 end)

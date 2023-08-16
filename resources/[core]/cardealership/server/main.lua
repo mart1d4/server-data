@@ -153,6 +153,12 @@ RegisterServerEvent('cardealership:buyVehicle', function(vehicle, color, type)
 
     xPlayer.addVehicle(vehicleData, true)
     xPlayer.removeAccountMoney(type, vehicle.price)
+    xPlayer.addBankingTransaction({
+        type = "withdraw",
+        amount = vehicle.price,
+        message = "Vehicle purchase",
+        time = os.time() * 1000,
+    })
     TriggerClientEvent('cardealership:vehicleBought', playerId)
 end)
 
@@ -160,12 +166,18 @@ RegisterServerEvent('cardealership:sellVehicle', function(vehicle, price)
     local playerId = source
     local xPlayer = System.GetPlayerFromId(playerId)
 
-    xPlayer.removeVehicle(vehicle.plate)
-    xPlayer.addAccountMoney('Bank', price)
-
     MySQL.query('DELETE FROM owned_vehicles WHERE plate = ?', {
         vehicle.plate
     })
+
+    xPlayer.addBankingTransaction({
+        type = "deposit",
+        amount = price,
+        message = "Vehicle sale",
+        time = os.time() * 1000,
+    })
+    xPlayer.removeVehicle(vehicle.plate)
+    xPlayer.addAccountMoney('Bank', price)
 
     local activeVehicle = Player(playerId).state.activeVehicleNet
 

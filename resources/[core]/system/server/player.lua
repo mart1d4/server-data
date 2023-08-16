@@ -179,6 +179,13 @@ function CreatePlayer(
 		TriggerEvent('system:playerUpdated', self.playerId)
 	end
 
+	function self.addBankingTransaction(transaction)
+		table.insert(self.banking.transactionHistory, transaction)
+
+		self.triggerEvent('system:playerUpdated', 'banking', self.banking)
+		TriggerEvent('system:playerUpdated', self.playerId)
+	end
+
 	-- Vehicles
 	function self.addVehicle(vehicle, makeActive)
 		table.insert(self.vehicles, vehicle)

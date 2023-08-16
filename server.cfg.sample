@@ -1,0 +1,36 @@
+endpoint_add_tcp "0.0.0.0:30120"
+endpoint_add_udp "0.0.0.0:30120"
+
+exec resources.cfg
+
+# Add system admins
+add_ace group.admin command allow
+add_ace group.admin command.quit deny
+add_principal identifier.fivem:1 group.admin
+
+# System resource permissions
+add_ace resource.system command.add_ace allow
+add_ace resource.system command.add_principal allow
+add_ace resource.system command.remove_principal allow
+add_ace resource.system command.stop allow
+
+sets locale "" 
+sets tags ""
+set gamename gta5
+
+sets sv_projectDesc ""
+sets sv_projectName ""
+
+sets banner_detail ""
+sets banner_connecting ""
+load_server_icon ""
+
+sv_hostname ""
+sv_master1 ""
+sv_scriptHookAllowed 0
+sv_enforceGameBuild 2944
+sv_endpointPrivacy true
+sv_maxclients 
+sv_licenseKey 
+
+set mysql_connection_string ""
