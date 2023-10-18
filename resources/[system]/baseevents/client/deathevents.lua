@@ -23,6 +23,7 @@ Citizen.CreateThread(function()
 				local killerinvehicle = false
 				local killervehiclename = ''
                 local killervehicleseat = 0
+                
 				if killerentitytype == 1 then
 					killertype = GetPedType(killer)
 					if IsPedInAnyVehicle(killer, false) == 1 then

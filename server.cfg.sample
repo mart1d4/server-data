@@ -14,7 +14,7 @@ add_ace resource.system command.add_principal allow
 add_ace resource.system command.remove_principal allow
 add_ace resource.system command.stop allow
 
-sets locale "" 
+sets locale ""
 sets tags ""
 set gamename gta5
 
@@ -30,7 +30,7 @@ sv_master1 ""
 sv_scriptHookAllowed 0
 sv_enforceGameBuild 2944
 sv_endpointPrivacy true
-sv_maxclients 
-sv_licenseKey 
+sv_maxclients
+sv_licenseKey
 
 set mysql_connection_string ""

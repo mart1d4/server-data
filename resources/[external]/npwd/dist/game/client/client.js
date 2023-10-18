@@ -225,13 +225,12 @@
           phoneNumberColumn: "phone_number"
         },
         images: {
-          url: "https://api.projecterror.dev/image",
-          type: "pe_image",
+          url: "https://api.fivemanage.com/api/image",
+          type: "image",
           imageEncoding: "webp",
           contentType: "multipart/form-data",
           useContentType: false,
-          useWebhook: false,
-          authorizationHeader: "PE-Secret",
+          authorizationHeader: "Authorization",
           authorizationPrefix: "",
           useAuthorization: true,
           returnedDataIndexes: ["url"]
@@ -248,9 +247,12 @@
             "discord.com",
             "cdn.discordapp.com",
             "media.discordapp.com",
+            "media.discordapp.net",
             "upload.wikipedia.org",
             "i.projecterror.dev",
-            "upcdn.io"
+            "upcdn.io",
+            "i.fivemanage.com",
+            "api.fivemanage.com"
           ]
         },
         profanityFilter: {
@@ -270,7 +272,6 @@
           enableEmojis: true,
           enableImages: true,
           maxImages: 1,
-          allowNoMessage: false,
           resultsLimit: 25
         },
         match: {
@@ -290,8 +291,8 @@
         apps: [],
         voiceMessage: {
           enabled: false,
-          authorizationHeader: "PE-Secret",
-          url: "",
+          authorizationHeader: "Authorization",
+          url: "https://api.fivemange/api/audio",
           returnedDataIndexes: ["url"]
         }
       };
@@ -869,6 +870,12 @@
       onNet("createTweetBroadcast" /* CREATE_TWEET_BROADCAST */, (tweet) => {
         sendTwitterMessage("createTweetBroadcast" /* CREATE_TWEET_BROADCAST */, tweet);
       });
+      onNet("npwd:tweetLikedBroadcast" /* TWEET_LIKED_BROADCAST */, (tweetId, isAddLike, likedByProfileName) => {
+        sendTwitterMessage("npwd:tweetLikedBroadcast" /* TWEET_LIKED_BROADCAST */, { tweetId, isAddLike, likedByProfileName });
+      });
+      onNet("npwd:deleteTweetBroadcast" /* DELETE_TWEET_BROADCAST */, (tweetId) => {
+        sendTwitterMessage("npwd:deleteTweetBroadcast" /* DELETE_TWEET_BROADCAST */, tweetId);
+      });
     }
   });
 
@@ -952,6 +959,7 @@
       init_cl_utils();
       var inCameraMode = false;
       var canToggleHUD = false;
+      var canToggleRadar = false;
       function closePhoneTemp() {
         SetNuiFocus(false, false);
         sendMessage("PHONE", "npwd:setVisibility" /* SET_VISIBILITY */, false);
@@ -984,6 +992,12 @@
           DisplayHud(false);
         } else {
           canToggleHUD = false;
+        }
+        if (!IsRadarHidden()) {
+          canToggleRadar = true;
+          DisplayRadar(false);
+        } else {
+          canToggleRadar = false;
         }
         emit("npwd:PhotoModeStarted" /* NPWD_PHOTO_MODE_STARTED */);
         while (inCameraMode) {
@@ -1020,6 +1034,10 @@
           DisplayHud(true);
           canToggleHUD = false;
         }
+        if (canToggleRadar) {
+          DisplayRadar(true);
+          canToggleRadar = false;
+        }
         return resp;
       });
       var handleCameraExit = () => __async(exports, null, function* () {
@@ -1034,6 +1052,10 @@
         if (canToggleHUD) {
           DisplayHud(true);
           canToggleHUD = false;
+        }
+        if (canToggleRadar) {
+          DisplayRadar(true);
+          canToggleRadar = false;
         }
       });
       RegisterNuiProxy("npwd:FetchPhotos" /* FETCH_PHOTOS */);
@@ -1190,7 +1212,7 @@
           const hangUpSound = new Sound(this.hangUpSoundName, this.hangUpSoundSet);
           hangUpSound.play();
         }
-        handleStartCall(transmitter, receiver, isTransmitter, isUnavailable) {
+        handleStartCall(transmitter, receiver, isTransmitter, isUnavailable, isAnonymous) {
           return __async(this, null, function* () {
             if (this.isInCall() || !(yield checkHasPhone()) || this.currentPendingCall)
               return emitNet(
@@ -1215,7 +1237,8 @@
               receiver,
               isTransmitter,
               accepted: false,
-              isUnavailable
+              isUnavailable,
+              isAnonymous
             });
           });
         }
@@ -1294,8 +1317,8 @@
           if (serverRes.status !== "ok") {
             return cb == null ? void 0 : cb(serverRes);
           }
-          const { transmitter, isTransmitter, receiver, isUnavailable } = serverRes.data;
-          callService.handleStartCall(transmitter, receiver, isTransmitter, isUnavailable);
+          const { transmitter, isTransmitter, receiver, isUnavailable, isAnonymous } = serverRes.data;
+          callService.handleStartCall(transmitter, receiver, isTransmitter, isUnavailable, isAnonymous);
           cb == null ? void 0 : cb(serverRes);
         } catch (e) {
           console.error(e);
@@ -1304,8 +1327,8 @@
       });
       RegisterNuiCB("npwd:beginCall" /* INITIALIZE_CALL */, initializeCallHandler);
       onNetTyped("npwd:startCall" /* START_CALL */, (data) => __async(void 0, null, function* () {
-        const { transmitter, isTransmitter, receiver, isUnavailable } = data;
-        callService.handleStartCall(transmitter, receiver, isTransmitter, isUnavailable);
+        const { transmitter, isTransmitter, receiver, isUnavailable, isAnonymous } = data;
+        callService.handleStartCall(transmitter, receiver, isTransmitter, isUnavailable, isAnonymous);
       }));
       RegisterNuiCB("npwd:acceptCall" /* ACCEPT_CALL */, (data, cb) => {
         animationService.startPhoneCall();
@@ -1525,9 +1548,9 @@
         sendPhoneEvent("npwd:isPhoneDisabled" /* IS_PHONE_DISABLED */, bool);
       });
       exps2("isPhoneDisabled", () => global.isPhoneDisabled);
-      exps2("startPhoneCall", (number) => {
+      exps2("startPhoneCall", (number, isAnonymous = false) => {
         verifyExportArgType("startPhoneCall", number, ["string"]);
-        initializeCallHandler({ receiverNumber: number });
+        initializeCallHandler({ receiverNumber: number, isAnonymous });
       });
       exps2("fillNewContact", (contactData) => {
         verifyExportArgType("fillNewContact", contactData, ["object"]);

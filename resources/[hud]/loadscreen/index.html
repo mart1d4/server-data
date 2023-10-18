@@ -1,23 +1,20 @@
 <html>
     <head>
-        <link
-            href="style.css"
-            rel="stylesheet"
-            type="text/css"
-        />
+        <link href="style.css" rel="stylesheet" type="text/css" />
     </head>
 
-    <body>
+    <body onclick="printRandomHelpMessage()" onkeyup="printRandomHelpMessage()">
         <div class="title">
-            <h1 title="Server name">West Coast Dreamin</h1>
+            <h1 title="Server name">Westcoast Dreamin</h1>
             <h2 title="Server mode">Free Mode</h2>
         </div>
 
         <div class="barContainer">
             <div class="intel">
-                <h2>Intel</h2>
+                <h2>Some Intel</h2>
                 <h3></h3>
             </div>
+
             <div class="loadbar"><div></div></div>
             <p class="helpMessage"></p>
         </div>
@@ -25,63 +22,58 @@
         <script type="text/javascript">
             let count = 0;
             let thisCount = 0;
+            let index = 0;
 
             const messages = {
-                INIT_BEFORE_MAP_LOADED: ['Loading the map'],
-                INIT_AFTER_MAP_LOADED: ['Map loaded', 'Doing something'],
-                INIT_SESSION: ['Preparing Session', 'Session almost done', 'Session ready'],
+                INIT_BEFORE_MAP_LOADED: ["Loading the map"],
+                INIT_AFTER_MAP_LOADED: ["Map loaded", "Doing something"],
+                INIT_SESSION: ["Preparing Session", "Session almost done", "Session ready"],
             };
 
             const helpers = [
-                'You can repair your car by pressing <code>k</code>',
-                'You can open the menu by pressing <code>F1</code>',
+                "You can repair your car by pressing <code>K</code>",
+                "Open the menu by pressing <code>M</code>",
+                "Open your phone by pressing <code>F1</code>",
             ];
 
             const handlers = {
                 startInitFunctionOrder(data) {
                     count = data.count;
-
-                    document.querySelector('.intel > h3').innerHTML =
-                        messages[data.type][data.order - 1] || '';
+                    document.querySelector(".intel > h3").innerHTML = messages[data.type][data.order - 1] || "";
                 },
 
                 initFunctionInvoking(data) {
-                    document.querySelector('.loadbar > div').style.left = '0%';
-                    document.querySelector('.loadbar > div').style.width =
-                        (data.idx / count) * 100 + '%';
+                    document.querySelector(".loadbar > div").style.left = "0%";
+                    document.querySelector(".loadbar > div").style.width = (data.idx / count) * 100 + "%";
                 },
 
                 startDataFileEntries(data) {
                     count = data.count;
-
-                    document.querySelector('.intel > h3').innerHTML = 'Starting data file entries';
+                    document.querySelector(".intel > h3").innerHTML = "Starting data file entries";
                 },
 
                 performMapLoadFunction(data) {
                     ++thisCount;
-
-                    document.querySelector('.loadbar > div').style.left = '0%';
-                    document.querySelector('.loadbar > div').style.width =
-                        (thisCount / count) * 100 + '%';
+                    document.querySelector(".loadbar > div").style.left = "0%";
+                    document.querySelector(".loadbar > div").style.width = (thisCount / count) * 100 + "%";
                 },
 
                 onLogLine(data) {
-                    document.querySelector('.barContainer > h3').innerHTML = data.message;
+                    document.querySelector(".barContainer > h3").innerHTML = data.message;
                 },
             };
 
-            window.addEventListener('message', function (e) {
+            window.addEventListener("message", function (e) {
                 (handlers[e.data.eventName] || function () {})(e.data);
             });
 
             const printRandomHelpMessage = () => {
-                const randomNum = Math.floor(Math.random() * helpers.length);
-                document.querySelector('.helpMessage').innerHTML = helpers[randomNum];
+                const message = helpers[index];
+                document.querySelector(".helpMessage").innerHTML = message;
+                index = index + 1 >= helpers.length ? 0 : index + 1;
             };
 
             printRandomHelpMessage();
-
-            setInterval(printRandomHelpMessage, 10000);
         </script>
     </body>
 </html>

@@ -11,11 +11,11 @@ System.Items = {}
 -- Database
 System.DatabaseConnected = false
 
--- Save Players Every 20 Minutes
+-- Save Players Every 10 Minutes
 local function StartDBSync()
     CreateThread(function()
         while true do
-            Wait(20 * 60 * 1000)
+            Wait(10 * 60 * 1000)
             System.SavePlayers()
         end
     end)
@@ -58,19 +58,19 @@ end
 MySQL.ready(function()
     System.DatabaseConnected = true
 
-    local items = MySQL.query.await('SELECT * FROM items')
+    local items = MySQL.query.await('SELECT * FROM Items')
     for _, item in ipairs(items) do
         System.Items[item.name] = {
             weight = item.weight,
             foodIntake = item.food_intake or nil,
             waterIntake = item.water_intake or nil,
-            sellPrice = item.sell_price,
+            sellPrice = item.price,
             rarity = item.rarity,
-            canRemove = item.can_remove,
+            canRemove = item.removable,
         }
     end
 
-    local jobGrades = MySQL.query.await('SELECT * FROM job_grades')
+    local jobGrades = MySQL.query.await('SELECT * FROM JobGrades')
     for _, grade in ipairs(jobGrades) do
         if not System.Jobs[grade.job_name] then
             -- Job isn't listed yet, add it

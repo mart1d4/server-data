@@ -2,7 +2,6 @@ local playerCount = 0
 local list = {}
 
 RegisterServerEvent('hardcap:playerActivated')
-
 AddEventHandler('hardcap:playerActivated', function()
     if not list[source] then
         playerCount = playerCount + 1
@@ -19,8 +18,6 @@ end)
 
 AddEventHandler('playerConnecting', function(name, setReason)
     local cv = GetConvarInt('sv_maxclients', 10)
-
-    print('Connecting: ' .. name .. '^7')
 
     if playerCount >= cv then
         print('Full. :(')

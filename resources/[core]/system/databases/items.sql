@@ -1,5 +1,5 @@
 INSERT INTO
-	items
+	`Items`
 VALUES
 	-- Food
 	('Water', 1, 0, 75, 1, 0, 1),

@@ -57408,13 +57408,12 @@ var config_default_default = {
     phoneNumberColumn: "phone_number"
   },
   images: {
-    url: "https://api.projecterror.dev/image",
-    type: "pe_image",
+    url: "https://api.fivemanage.com/api/image",
+    type: "image",
     imageEncoding: "webp",
     contentType: "multipart/form-data",
     useContentType: false,
-    useWebhook: false,
-    authorizationHeader: "PE-Secret",
+    authorizationHeader: "Authorization",
     authorizationPrefix: "",
     useAuthorization: true,
     returnedDataIndexes: ["url"]
@@ -57431,9 +57430,12 @@ var config_default_default = {
       "discord.com",
       "cdn.discordapp.com",
       "media.discordapp.com",
+      "media.discordapp.net",
       "upload.wikipedia.org",
       "i.projecterror.dev",
-      "upcdn.io"
+      "upcdn.io",
+      "i.fivemanage.com",
+      "api.fivemanage.com"
     ]
   },
   profanityFilter: {
@@ -57453,7 +57455,6 @@ var config_default_default = {
     enableEmojis: true,
     enableImages: true,
     maxImages: 1,
-    allowNoMessage: false,
     resultsLimit: 25
   },
   match: {
@@ -57473,8 +57474,8 @@ var config_default_default = {
   apps: [],
   voiceMessage: {
     enabled: false,
-    authorizationHeader: "PE-Secret",
-    url: "",
+    authorizationHeader: "Authorization",
+    url: "https://api.fivemange/api/audio",
     returnedDataIndexes: ["url"]
   }
 };
@@ -59273,11 +59274,12 @@ var DarkchatDB = new _DarkchatDB();
 // ../../packages/database/src/calls/index.ts
 var _CallsRepo = class {
   async saveCall(call) {
-    const query = "INSERT INTO npwd_calls (identifier, transmitter, receiver, `start`) VALUES (?, ?, ?, ?)";
+    const query = "INSERT INTO npwd_calls (identifier, transmitter, receiver, isAnonymous, `start`) VALUES (?, ?, ?, ?, ?)";
     await db_wrapper_default2._rawExec(query, [
       call.identifier,
       call.transmitter,
       call.receiver,
+      call.isAnonymous,
       call.start
     ]);
   }
@@ -59511,6 +59513,232 @@ var _MarketplaceService = class {
 var MarketplaceService = new _MarketplaceService();
 var marketplace_service_default = MarketplaceService;
 
+// ../../node_modules/.pnpm/uuid@8.3.2/node_modules/uuid/wrapper.mjs
+var import_dist = __toESM(require_dist4(), 1);
+var v1 = import_dist.default.v1;
+var v3 = import_dist.default.v3;
+var v4 = import_dist.default.v4;
+var v5 = import_dist.default.v5;
+var NIL = import_dist.default.NIL;
+var version = import_dist.default.version;
+var validate = import_dist.default.validate;
+var stringify = import_dist.default.stringify;
+var parse = import_dist.default.parse;
+
+// server/calls/calls.utils.ts
+var callLogger = mainLogger.child({ module: "calls" });
+
+// server/calls/calls.service.ts
+var CallsService = class {
+  constructor() {
+    this.callMap = new f();
+    this.callsDB = CallsRepo;
+    callLogger.debug("Call service started");
+  }
+  setCallInMap(transmitterNumber, callObj) {
+    this.callMap.set(transmitterNumber, callObj);
+    callLogger.debug(`Call obj set with key ${transmitterNumber}, value:`);
+    callLogger.debug(callObj);
+  }
+  isPlayerInCall(source2) {
+    const phoneNunber = player_service_default.getPlayer(source2).getPhoneNumber();
+    return this.isPhoneNumberInCall(phoneNunber);
+  }
+  isPhoneNumberInCall(phoneNumber) {
+    const calls = this.callMap.find((call) => {
+      return call.transmitter === phoneNumber || call.receiver === phoneNumber;
+    });
+    return !!calls;
+  }
+  async handleInitializeCall(reqObj, resp) {
+    const transmittingPlayer = player_service_default.getPlayer(reqObj.source);
+    const transmitterNumber = transmittingPlayer.getPhoneNumber();
+    const receiverIdentifier = await player_service_default.getIdentifierFromPhoneNumber(
+      reqObj.data.receiverNumber,
+      true
+    );
+    const startCallTimeUnix = Math.floor(new Date().getTime() / 1e3);
+    const callIdentifier = v4();
+    const tempSaveCallObj = {
+      identifier: callIdentifier,
+      transmitter: transmitterNumber,
+      receiver: reqObj.data.receiverNumber,
+      is_accepted: false,
+      start: startCallTimeUnix.toString(),
+      isAnonymous: reqObj.data.isAnonymous
+    };
+    if (!receiverIdentifier) {
+      await this.callsDB.saveCall(tempSaveCallObj);
+      return resp({
+        status: "ok",
+        data: {
+          transmitter: transmitterNumber,
+          isTransmitter: true,
+          receiver: reqObj.data.receiverNumber,
+          isUnavailable: true,
+          is_accepted: false,
+          start: startCallTimeUnix.toString(),
+          identifier: callIdentifier
+        }
+      });
+    }
+    const receivingPlayer = player_service_default.getPlayerFromIdentifier(receiverIdentifier);
+    if (!receivingPlayer) {
+      await this.callsDB.saveCall(tempSaveCallObj);
+      return resp({
+        status: "ok",
+        data: {
+          is_accepted: false,
+          transmitter: transmitterNumber,
+          isTransmitter: true,
+          receiver: reqObj.data.receiverNumber,
+          isUnavailable: true,
+          start: startCallTimeUnix.toString(),
+          identifier: callIdentifier
+        }
+      });
+    }
+    callLogger.debug(`Receiving Identifier: ${receiverIdentifier}`);
+    callLogger.debug(`Receiving source: ${receivingPlayer.source} `);
+    const callObj = {
+      identifier: callIdentifier,
+      transmitter: transmitterNumber,
+      transmitterSource: transmittingPlayer.source,
+      receiver: reqObj.data.receiverNumber,
+      receiverSource: receivingPlayer.source,
+      start: startCallTimeUnix.toString(),
+      is_accepted: false,
+      isAnonymous: reqObj.data.isAnonymous
+    };
+    this.setCallInMap(callObj.transmitter, callObj);
+    try {
+      await this.callsDB.saveCall(callObj);
+    } catch (e2) {
+      callLogger.error(
+        `Unable to save call object for transmitter number ${transmitterNumber}. Error: ${e2.message}`
+      );
+      resp({ status: "error", errorMsg: "DATABASE_ERROR" });
+    }
+    resp({
+      status: "ok",
+      data: {
+        is_accepted: false,
+        transmitter: transmitterNumber,
+        receiver: reqObj.data.receiverNumber,
+        isTransmitter: true,
+        start: startCallTimeUnix.toString(),
+        identifier: callIdentifier
+      }
+    });
+    emitNetTyped(
+      "npwd:startCall" /* START_CALL */,
+      {
+        is_accepted: false,
+        transmitter: transmitterNumber,
+        receiver: reqObj.data.receiverNumber,
+        isTransmitter: false,
+        isAnonymous: reqObj.data.isAnonymous
+      },
+      receivingPlayer.source
+    );
+  }
+  async handleAcceptCall(src, transmitterNumber) {
+    const targetCallItem = this.callMap.get(transmitterNumber);
+    targetCallItem.is_accepted = true;
+    const channelId = targetCallItem.transmitterSource;
+    await this.callsDB.updateCall(targetCallItem, true, null);
+    callLogger.debug(`Call with key ${transmitterNumber} was updated to be accepted`);
+    emitNetTyped(
+      "npwd:callAccepted" /* WAS_ACCEPTED */,
+      {
+        is_accepted: true,
+        transmitter: transmitterNumber,
+        receiver: targetCallItem.receiver,
+        isTransmitter: false,
+        isAnonymous: targetCallItem.isAnonymous,
+        channelId
+      },
+      targetCallItem.receiverSource
+    );
+    mainLogger.debug(targetCallItem);
+    emitNetTyped(
+      "npwd:callAccepted" /* WAS_ACCEPTED */,
+      {
+        is_accepted: true,
+        transmitter: transmitterNumber,
+        receiver: targetCallItem.receiver,
+        isTransmitter: true,
+        channelId
+      },
+      targetCallItem.transmitterSource
+    );
+  }
+  async handleFetchCalls(reqObj, resp) {
+    try {
+      const player = player_service_default.getPlayer(reqObj.source);
+      const srcPlayerNumber = player.getPhoneNumber();
+      const calls = await this.callsDB.fetchCalls(srcPlayerNumber);
+      resp({ status: "ok", data: calls });
+    } catch (e2) {
+      resp({ status: "error", errorMsg: "DATABASE_ERROR" });
+      console.error(`Error while fetching calls, ${e2.message}`);
+    }
+  }
+  async handleRejectCall(src, transmitterNumber) {
+    const currentCall = this.callMap.get(transmitterNumber);
+    const endCallTimeUnix = Math.floor(new Date().getTime() / 1e3);
+    if (!currentCall) {
+      callLogger.error(
+        `Call with transmitter number ${transmitterNumber} does not exist in current calls map!`
+      );
+      return;
+    }
+    emitNet("npwd:callRejected" /* WAS_REJECTED */, currentCall.receiverSource, currentCall);
+    emitNet("npwd:callRejected" /* WAS_REJECTED */, currentCall.transmitterSource, currentCall);
+    await this.callsDB.updateCall(currentCall, false, endCallTimeUnix);
+    this.callMap.delete(transmitterNumber);
+  }
+  async handleEndCall(reqObj, resp) {
+    const transmitterNumber = reqObj.data.transmitterNumber;
+    const endCallTimeUnix = Math.floor(new Date().getTime() / 1e3);
+    if (reqObj.data.isUnavailable) {
+      emitNet("npwd:callEnded" /* WAS_ENDED */, reqObj.source);
+      resp({ status: "ok" });
+      return;
+    }
+    const currentCall = this.callMap.get(transmitterNumber);
+    if (!currentCall) {
+      callLogger.error(
+        `Call with transmitter number ${transmitterNumber} does not exist in current calls map!`
+      );
+      return resp({ status: "error", errorMsg: "DOES_NOT_EXIST" });
+    }
+    if (currentCall) {
+      if (currentCall.is_accepted) {
+        emitNet(
+          "npwd:callEnded" /* WAS_ENDED */,
+          currentCall.receiverSource,
+          currentCall.transmitterSource,
+          currentCall
+        );
+        emitNet(
+          "npwd:callEnded" /* WAS_ENDED */,
+          currentCall.transmitterSource,
+          currentCall.transmitterSource,
+          currentCall
+        );
+      } else {
+        emitNet("npwd:callRejected" /* WAS_REJECTED */, currentCall.receiverSource, currentCall);
+        emitNet("npwd:callRejected" /* WAS_REJECTED */, currentCall.transmitterSource, currentCall);
+      }
+    }
+    resp({ status: "ok" });
+    await this.callsDB.updateCall(currentCall, currentCall?.is_accepted, endCallTimeUnix);
+    this.callMap.delete(transmitterNumber);
+  }
+};
+var calls_service_default = new CallsService();
+
 // utils/fivem.ts
 var Delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
@@ -59520,6 +59748,7 @@ var _PlayerService = class {
     this.playersBySource = new f();
     this.playersByIdentifier = new f();
     this.playerDB = PlayerRepo;
+    this.callService = calls_service_default;
     playerLogger.debug("Player Service started");
   }
   addPlayerToMaps(source2, player) {
@@ -59546,6 +59775,9 @@ var _PlayerService = class {
       return null;
     }
     return player;
+  }
+  isBusy(source2) {
+    return this.callService.isPlayerInCall(source2);
   }
   async getIdentifierFromPhoneNumber(phoneNumber, fetch3) {
     const onlinePlayer = this.playersBySource.find(
@@ -59755,218 +59987,6 @@ if (!config.general.useResourceIntegration) {
     }
   });
 }
-
-// ../../node_modules/.pnpm/uuid@8.3.2/node_modules/uuid/wrapper.mjs
-var import_dist = __toESM(require_dist4(), 1);
-var v1 = import_dist.default.v1;
-var v3 = import_dist.default.v3;
-var v4 = import_dist.default.v4;
-var v5 = import_dist.default.v5;
-var NIL = import_dist.default.NIL;
-var version = import_dist.default.version;
-var validate = import_dist.default.validate;
-var stringify = import_dist.default.stringify;
-var parse = import_dist.default.parse;
-
-// server/calls/calls.utils.ts
-var callLogger = mainLogger.child({ module: "calls" });
-
-// server/calls/calls.service.ts
-var CallsService = class {
-  constructor() {
-    this.callMap = new f();
-    this.callsDB = CallsRepo;
-    callLogger.debug("Call service started");
-  }
-  setCallInMap(transmitterNumber, callObj) {
-    this.callMap.set(transmitterNumber, callObj);
-    callLogger.debug(`Call obj set with key ${transmitterNumber}, value:`);
-    callLogger.debug(callObj);
-  }
-  async handleInitializeCall(reqObj, resp) {
-    const transmittingPlayer = player_service_default.getPlayer(reqObj.source);
-    const transmitterNumber = transmittingPlayer.getPhoneNumber();
-    const receiverIdentifier = await player_service_default.getIdentifierFromPhoneNumber(
-      reqObj.data.receiverNumber,
-      true
-    );
-    const startCallTimeUnix = Math.floor(new Date().getTime() / 1e3);
-    const callIdentifier = v4();
-    const tempSaveCallObj = {
-      identifier: callIdentifier,
-      transmitter: transmitterNumber,
-      receiver: reqObj.data.receiverNumber,
-      is_accepted: false,
-      start: startCallTimeUnix.toString()
-    };
-    if (!receiverIdentifier) {
-      await this.callsDB.saveCall(tempSaveCallObj);
-      return resp({
-        status: "ok",
-        data: {
-          transmitter: transmitterNumber,
-          isTransmitter: true,
-          receiver: reqObj.data.receiverNumber,
-          isUnavailable: true,
-          is_accepted: false,
-          start: startCallTimeUnix.toString(),
-          identifier: callIdentifier
-        }
-      });
-    }
-    const receivingPlayer = player_service_default.getPlayerFromIdentifier(receiverIdentifier);
-    if (!receivingPlayer) {
-      await this.callsDB.saveCall(tempSaveCallObj);
-      return resp({
-        status: "ok",
-        data: {
-          is_accepted: false,
-          transmitter: transmitterNumber,
-          isTransmitter: true,
-          receiver: reqObj.data.receiverNumber,
-          isUnavailable: true,
-          start: startCallTimeUnix.toString(),
-          identifier: callIdentifier
-        }
-      });
-    }
-    callLogger.debug(`Receiving Identifier: ${receiverIdentifier}`);
-    callLogger.debug(`Receiving source: ${receivingPlayer.source} `);
-    const callObj = {
-      identifier: callIdentifier,
-      transmitter: transmitterNumber,
-      transmitterSource: transmittingPlayer.source,
-      receiver: reqObj.data.receiverNumber,
-      receiverSource: receivingPlayer.source,
-      start: startCallTimeUnix.toString(),
-      is_accepted: false
-    };
-    this.setCallInMap(callObj.transmitter, callObj);
-    try {
-      await this.callsDB.saveCall(callObj);
-    } catch (e2) {
-      callLogger.error(
-        `Unable to save call object for transmitter number ${transmitterNumber}. Error: ${e2.message}`
-      );
-      resp({ status: "error", errorMsg: "DATABASE_ERROR" });
-    }
-    resp({
-      status: "ok",
-      data: {
-        is_accepted: false,
-        transmitter: transmitterNumber,
-        receiver: reqObj.data.receiverNumber,
-        isTransmitter: true,
-        start: startCallTimeUnix.toString(),
-        identifier: callIdentifier
-      }
-    });
-    emitNetTyped(
-      "npwd:startCall" /* START_CALL */,
-      {
-        is_accepted: false,
-        transmitter: transmitterNumber,
-        receiver: reqObj.data.receiverNumber,
-        isTransmitter: false
-      },
-      receivingPlayer.source
-    );
-  }
-  async handleAcceptCall(src, transmitterNumber) {
-    const targetCallItem = this.callMap.get(transmitterNumber);
-    targetCallItem.is_accepted = true;
-    const channelId = targetCallItem.transmitterSource;
-    await this.callsDB.updateCall(targetCallItem, true, null);
-    callLogger.debug(`Call with key ${transmitterNumber} was updated to be accepted`);
-    emitNetTyped(
-      "npwd:callAccepted" /* WAS_ACCEPTED */,
-      {
-        is_accepted: true,
-        transmitter: transmitterNumber,
-        receiver: targetCallItem.receiver,
-        isTransmitter: false,
-        channelId
-      },
-      targetCallItem.receiverSource
-    );
-    mainLogger.debug(targetCallItem);
-    emitNetTyped(
-      "npwd:callAccepted" /* WAS_ACCEPTED */,
-      {
-        is_accepted: true,
-        transmitter: transmitterNumber,
-        receiver: targetCallItem.receiver,
-        isTransmitter: true,
-        channelId
-      },
-      targetCallItem.transmitterSource
-    );
-  }
-  async handleFetchCalls(reqObj, resp) {
-    try {
-      const player = player_service_default.getPlayer(reqObj.source);
-      const srcPlayerNumber = player.getPhoneNumber();
-      const calls = await this.callsDB.fetchCalls(srcPlayerNumber);
-      resp({ status: "ok", data: calls });
-    } catch (e2) {
-      resp({ status: "error", errorMsg: "DATABASE_ERROR" });
-      console.error(`Error while fetching calls, ${e2.message}`);
-    }
-  }
-  async handleRejectCall(src, transmitterNumber) {
-    const currentCall = this.callMap.get(transmitterNumber);
-    const endCallTimeUnix = Math.floor(new Date().getTime() / 1e3);
-    if (!currentCall) {
-      callLogger.error(
-        `Call with transmitter number ${transmitterNumber} does not exist in current calls map!`
-      );
-      return;
-    }
-    emitNet("npwd:callRejected" /* WAS_REJECTED */, currentCall.receiverSource, currentCall);
-    emitNet("npwd:callRejected" /* WAS_REJECTED */, currentCall.transmitterSource, currentCall);
-    await this.callsDB.updateCall(currentCall, false, endCallTimeUnix);
-    this.callMap.delete(transmitterNumber);
-  }
-  async handleEndCall(reqObj, resp) {
-    const transmitterNumber = reqObj.data.transmitterNumber;
-    const endCallTimeUnix = Math.floor(new Date().getTime() / 1e3);
-    if (reqObj.data.isUnavailable) {
-      emitNet("npwd:callEnded" /* WAS_ENDED */, reqObj.source);
-      resp({ status: "ok" });
-      return;
-    }
-    const currentCall = this.callMap.get(transmitterNumber);
-    if (!currentCall) {
-      callLogger.error(
-        `Call with transmitter number ${transmitterNumber} does not exist in current calls map!`
-      );
-      return resp({ status: "error", errorMsg: "DOES_NOT_EXIST" });
-    }
-    if (currentCall) {
-      if (currentCall.is_accepted) {
-        emitNet(
-          "npwd:callEnded" /* WAS_ENDED */,
-          currentCall.receiverSource,
-          currentCall.transmitterSource,
-          currentCall
-        );
-        emitNet(
-          "npwd:callEnded" /* WAS_ENDED */,
-          currentCall.transmitterSource,
-          currentCall.transmitterSource,
-          currentCall
-        );
-      } else {
-        emitNet("npwd:callRejected" /* WAS_REJECTED */, currentCall.receiverSource, currentCall);
-        emitNet("npwd:callRejected" /* WAS_REJECTED */, currentCall.transmitterSource, currentCall);
-      }
-    }
-    resp({ status: "ok" });
-    await this.callsDB.updateCall(currentCall, currentCall?.is_accepted, endCallTimeUnix);
-    this.callMap.delete(transmitterNumber);
-  }
-};
-var calls_service_default = new CallsService();
 
 // server/calls/middleware/onCall.ts
 var exp2 = global.exports;
@@ -60291,8 +60311,8 @@ onNetPromise("npwd:beginCall" /* INITIALIZE_CALL */, async (reqObj, resp) => {
               message
             });
           },
-          forward: (receiverNumber) => {
-            calls_service_default.handleInitializeCall({ ...reqObj, data: { receiverNumber } }, resp).catch((e2) => {
+          forward: (receiverNumber, isAnonymous = false) => {
+            calls_service_default.handleInitializeCall({ ...reqObj, data: { receiverNumber, isAnonymous } }, resp).catch((e2) => {
               resp({ status: "error", errorMsg: "SERVER_ERROR" });
               callLogger.error(`Error occured handling init call: ${e2.message}`);
             }).then(() => {
@@ -61870,6 +61890,7 @@ var _PhotoService = class {
               const res = await webhookPhotoUpload(this.TOKEN, filePath, blob, player);
               const identifier2 = player_service_default.getIdentifier(reqObj.source);
               const photo2 = await this.photoDB.uploadPhoto(identifier2, res);
+              fs2.rmSync(filePath);
               return resp({ status: "ok", data: photo2 });
             } catch (err2) {
               photoLogger.error(`Failed to upload photo`, {
@@ -62290,6 +62311,7 @@ var _TwitterService = class {
       const identifier = player_service_default.getIdentifier(reqObj.source);
       await this.twitterDB.deleteTweet(identifier, reqObj.data.tweetId);
       resp({ status: "ok" });
+      emitNet("npwd:deleteTweetBroadcast" /* DELETE_TWEET_BROADCAST */, -1, reqObj.data.tweetId);
     } catch (e2) {
       twitterLogger.error(`Delete tweet failed, ${e2.message}`, {
         source: reqObj.source
@@ -62302,12 +62324,14 @@ var _TwitterService = class {
       const identifier = player_service_default.getIdentifier(reqObj.source);
       const profile = await this.twitterDB.getOrCreateProfile(identifier);
       const likeExists = await this.twitterDB.doesLikeExist(profile.id, reqObj.data.tweetId);
+      const likedByProfileName = profile.profile_name;
       if (likeExists) {
         await this.twitterDB.deleteLike(profile.id, reqObj.data.tweetId);
       } else {
         await this.twitterDB.createLike(profile.id, reqObj.data.tweetId);
       }
       resp({ status: "ok" });
+      emitNet("npwd:tweetLikedBroadcast" /* TWEET_LIKED_BROADCAST */, -1, reqObj.data.tweetId, !likeExists, likedByProfileName);
     } catch (e2) {
       twitterLogger.error(`Like failed, ${e2.message}`, {
         source: reqObj.source
@@ -63039,6 +63063,12 @@ exp5("getPlayerData", async (locator) => {
     identifier: player.getIdentifier(),
     source: player.source
   };
+});
+exp5("isPlayerBusy", (src) => {
+  return player_service_default.isBusy(src);
+});
+exp5("isPhoneNumberBusy", (phoneNumber) => {
+  return calls_service_default.isPhoneNumberInCall(phoneNumber);
 });
 
 // server/messages/middleware/emitMessage.ts

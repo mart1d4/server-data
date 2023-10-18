@@ -1,5 +1,5 @@
 INSERT INTO
-    vehicles (name, model, brand, price)
+    `Vehicles` (name, model, brand, price)
 VALUES
     -- Mercedes
     ('E55 W211', 'benze55', 'Mercedes', 100000),

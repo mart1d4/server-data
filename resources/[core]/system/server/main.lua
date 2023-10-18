@@ -131,7 +131,7 @@ function loadSystemPlayer(identifier, playerId, isNew)
     }
 
     local transactionHistory = MySQL.prepare.await(
-        'SELECT * FROM banking WHERE user = ?',
+        'SELECT * FROM Transactions WHERE initiator = ?',
         { identifier }
     )
 
@@ -182,7 +182,7 @@ function loadSystemPlayer(identifier, playerId, isNew)
     end
 
     xPlayer.updateCoords()
-    print(('[^2INFO^0] Player ^5"%s"^0 has connected to the server with id ^5%s^7.'):format(xPlayer.name, playerId))
+    print(('[^2INFO^0] Player ^5"%s"^0 joined the server with id ^5%s^7.'):format(xPlayer.name, playerId))
 end
 
 RegisterNetEvent('system:identityCreated', function(identity)
@@ -304,7 +304,7 @@ AddEventHandler('playerDropped', function(reason)
             System.Players[playerId] = nil
         end)
 
-        print(('[^2INFO^0] Player ^5"%s"^0 has left the server with id ^5%s^7.'):format(xPlayer.name, playerId))
+        print(('[^2INFO^0] Player ^5"%s"^0 left the server with id ^5%s^7.'):format(xPlayer.name, playerId))
 
         if Player(playerId).state.activeVehicleNet then
             local vehicle = NetworkGetEntityFromNetworkId(Player(playerId).state.activeVehicleNet)

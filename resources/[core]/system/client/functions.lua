@@ -173,7 +173,7 @@ function System.GetVehicleProperties(vehicle)
         doorsBroken = doorsBroken,
         windowsBroken = windowsBroken,
         tyreBurst = tyreBurst,
-        plate = System.Math.Trim(GetVehicleNumberPlateText(vehicle)),
+        plate =GetVehicleNumberPlateText(vehicle),
         plateIndex = GetVehicleNumberPlateTextIndex(vehicle),
 
         bodyHealth = System.Math.Round(GetVehicleBodyHealth(vehicle), 1),

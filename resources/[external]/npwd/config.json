@@ -21,11 +21,11 @@
     },
     "database": {
         "useIdentifierPrefix": false,
-        "playerTable": "users",
+        "playerTable": "Users",
         "identifierColumn": "id",
         "identifierType": "license",
         "profileQueries": true,
-        "phoneNumberColumn": "phone_number"
+        "phoneNumberColumn": "phone"
     },
     "debug": {
         "level": "error",
@@ -34,9 +34,9 @@
     },
     "defaultContacts": [],
     "disabledApps": [],
-    "apps": [],
+    "apps": ["pefcl"],
     "voiceMessage": {
-        "enabled": true,
+        "enabled": false,
         "authorizationHeader": "PE-Secret",
         "url": "",
         "returnedDataIndexes": ["url"]
