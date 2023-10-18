@@ -227,6 +227,8 @@ CreateThread(function()
                 chatInputActive = true
                 chatInputActivating = true
 
+                print("chatInputActive = true")
+
                 SendNUIMessage({
                     type = 'ON_OPEN'
                 })
@@ -235,8 +237,7 @@ CreateThread(function()
 
         if chatInputActivating then
             if not IsControlPressed(0, 245) then
-                SetNuiFocus(true)
-
+                print("chatInputActivating = false")
                 chatInputActivating = false
             end
         end
@@ -258,7 +259,7 @@ CreateThread(function()
 
             if chatHideState ~= lastChatHideState then
                 lastChatHideState = chatHideState
-
+                print("chatHideState = " .. chatHideState)
                 SendNUIMessage({
                     type = 'ON_SCREEN_STATE_CHANGE',
                     hideState = chatHideState,
