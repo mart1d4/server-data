@@ -4,3 +4,6 @@ hypnonema.db
 server.cfg
 resources/\[stream\]/vehicles
 db/
+
+# All logs, recursively
+**/*.log
